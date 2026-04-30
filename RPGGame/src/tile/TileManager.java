@@ -5,57 +5,110 @@ import java.io.IOException;
 import rpggame.GamePanel;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.util.ArrayList;
+import rpggame.UtilityTool;
 
 public class TileManager {
     
     GamePanel gp;
     public Tile[] tile;
     public int mapTileNum[][];
+    //drawPath??
+    ArrayList<String> fileNames = new ArrayList<>();
+    ArrayList<String> collisionStatus = new ArrayList<>();
     
     public TileManager(GamePanel gp){
         
         this.gp = gp;
         
-        tile = new Tile[10];
-        mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow]; //stores the map numbers here 
+        //READ TILE DATA FILE
+        InputStream is = getClass().getResourceAsStream("/maps/tileData.txt");
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
         
-        getTileImage();
-        loadMap("/maps/world01.txt");
-    }
-    
-    public void getTileImage(){
+        //GETTING TILE NAMES AND COLLISION
+        String line;
         
         try{
-            
-            tile[0] = new Tile();
-            tile[0].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/grass1.png"));
-            
-            tile[1] = new Tile();
-            tile[1].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/brickWall.png"));
-            tile[1].collision = true;
-
-            tile[2] = new Tile();
-            tile[2].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/water.png"));
-            tile[2].collision = true;
-            
-            tile[3] = new Tile();
-            tile[3].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/soil.png"));
-            
-            tile[4] = new Tile();
-            tile[4].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/tree1.png"));
-            tile[4].collision = true;
-            
-            tile[5] = new Tile();
-            tile[5].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/sand.png"));
-
+            while((line = br.readLine()) != null){
+                fileNames.add(line);
+                collisionStatus.add(br.readLine());
+            }
+            br.close();
         }
         catch(IOException e){
             e.printStackTrace();
         }
+        
+        //INITIALIZE THE TILE ARRAY BASED ON THE fileNams size
+        tile = new Tile[fileNames.size()];  //auto set number of tiles based on filename size
+        getTileImage();
+        
+        //GET THE maxWorldCol & Row
+        is = getClass().getResourceAsStream("/maps/world01.txt");
+        br = new BufferedReader(new InputStreamReader(is));
+        
+        try{
+            String line2 = br.readLine();
+            String maxTile[] = line2.split(" ");
+            
+            gp.maxWorldCol = maxTile.length;
+            gp.maxWorldRow = maxTile.length;
+            mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow]; //stores the map numbers here 
+                    
+            br.close();
+            
+        }
+        catch(IOException e){
+            System.out.println("Exception!");
+        }
+        
+        loadMap("/maps/world01.txt");    //edit in future to be //loadMap("/maps/sample.txt, 0");
+        
+        //loadMap("/maps/world01.txt");
     }
+    
+    public void getTileImage(){
+        
+        for(int i = 0; i < fileNames.size(); i++){
+            
+            String fileName;
+            boolean collision;
+            
+            //Get a file name
+            fileName = fileNames.get(i);
+            
+            //Get a collision status
+            if(collisionStatus.get(i).equals("true")){
+                collision = true;
+            }
+            else{
+                collision = false;
+            }
+            
+            setup(i, fileName, collision);
+            
+        }
+    }
+    public void setup(int index, String imageName, boolean collision){
+        
+        UtilityTool uTool = new UtilityTool();
+        
+        try{
+            tile[index] = new Tile();
+            tile[index].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/" + imageName));
+            tile[index].image = uTool.scaleImage(tile[index].image, gp.tileSize, gp.tileSize);
+            tile[index].collision = collision;  //blueprint for tile collision
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        
+    }
+    
     public void loadMap(String filePath){
         
         try{
@@ -111,7 +164,7 @@ public class TileManager {
                 worldY + gp.tileSize > gp.player.worldY - gp.player.screenY &&
                 worldY - gp.tileSize < gp.player.worldY + gp.player.screenY){
                 
-                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+                g2.drawImage(tile[tileNum].image, screenX, screenY, null);
             }
             
             worldCol++;

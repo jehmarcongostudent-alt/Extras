@@ -1,8 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package rpggame;
+import entity.Entity;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -27,14 +24,15 @@ public class GamePanel extends JPanel implements Runnable{
     public final int screenHeight = tileSize * maxScreenRow;   //576 pixel
     
     //WORLD SETTINGS
-    public final int maxWorldCol = 50;
-    public final int maxWorldRow = 50;
+    public int maxWorldCol;
+    public int maxWorldRow;
     
     //FPS
     int FPS = 60;
     
+    //SYSTEM
     TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler();
+    public KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound();
     Sound se = new Sound();
     public CollisionChecker cChecker = new CollisionChecker(this);
@@ -45,6 +43,14 @@ public class GamePanel extends JPanel implements Runnable{
     //ENTITY AND OBJECT
     public Player player = new Player(this,keyH);
     public SuperObject obj[] = new SuperObject[10]; //sets the maximum objects displayed at a time
+    public Entity npc[] = new Entity[10];
+    
+    //GAME STATE
+    public int gameState;
+    public final int titleState = 0;
+    public final int playState = 1;
+    public final int pauseState = 2;
+    public final int dialogueState = 3;
     
     public GamePanel(){
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -57,8 +63,10 @@ public class GamePanel extends JPanel implements Runnable{
     public void setUpGame(){
         
         aSetter.setObject();
-        
-        playMusic(0);
+        aSetter.setNPC();
+//        playMusic(0);
+//        stopMusic();
+        gameState = titleState;
     }
     
     public void startGameThread(){
@@ -101,7 +109,19 @@ public class GamePanel extends JPanel implements Runnable{
     }
     public void update(){   //updates the output on screen when action is done
 
-        player.update();
+        if(gameState == playState){
+            //PLAYER
+            player.update();
+            //NPC
+            for(int i = 0; i < npc.length; i++){
+                if(npc[i] != null){
+                    npc[i].update();
+                }
+            }
+        }
+        if(gameState == pauseState){
+            //nothing
+        }
     }
     //I think paintCompenent is a built in function
     public void paintComponent(Graphics g){
@@ -109,21 +129,52 @@ public class GamePanel extends JPanel implements Runnable{
         
         Graphics2D g2 = (Graphics2D)g;  //extends the graphic class to provide more sophistecated control over geometry, coordinate transformations, color management, and text Layout.
         
-        //TILE
-        tileM.draw(g2); //draw tile first before player otherwise tiles will cover player
-        
-        //OBJECT
-        for(int i = 0; i < obj.length; i++){    //scans each object 1 by 1
-            if(obj[i] != null){
-                obj[i].draw(g2, this);
-            }
+        //DEBUG
+        long drawStart = 0;
+        if(keyH.checkDrawTime == true){
+            drawStart = System.nanoTime();
         }
         
-        //PLAYER
-        player.draw(g2);
-    
-        //UI
-        ui.draw(g2);
+        //TITLE SCREEN
+        if(gameState == titleState){
+            ui.draw(g2);
+        }
+        //OTHERS
+        else{
+            //TILE
+            tileM.draw(g2); //draw tile first before player otherwise tiles will cover player
+
+            //OBJECT
+            for(int i = 0; i < obj.length; i++){    //scans each object 1 by 1
+                if(obj[i] != null){
+                    obj[i].draw(g2, this);
+                }
+            }
+
+            //NPC
+            for(int i = 0; i < npc.length; i++){
+                if(npc[i] != null){
+                    npc[i].draw(g2);
+                }
+            }
+
+            //PLAYER
+            player.draw(g2);
+
+            //UI
+            ui.draw(g2);
+        }
+        
+
+        
+        //DEBUG
+        if(keyH.checkDrawTime == true){
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            g2.setColor(Color.blue);
+            g2.drawString("Draw Time: " + passed, 10, 400);    //(iterator, TOP_ALIGNMENT, TOP_ALIGNMENT);
+            System.out.println("Draw Time: " + passed);
+        }
         
         g2.dispose();   //disposes of this graphic content and releases any resource that its using. basicaly save some memory
         

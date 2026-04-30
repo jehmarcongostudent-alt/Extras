@@ -8,19 +8,21 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
+import rpggame.UtilityTool;
 
 public class Player extends Entity{
     
-    GamePanel gp;
+    //Attributes
     KeyHandler keyH;
-    
     public final int screenX;
     public final int screenY;
-    public int hasKey = 0;
+    int standCounter = 0;
+    
     
     public Player(GamePanel gp, KeyHandler keyH){
         
-        this.gp = gp;
+        super(gp);
+        
         this.keyH = keyH;
         
         screenX = gp.screenWidth/2 - (gp.tileSize/2);   //fixes character at center of screen
@@ -39,32 +41,35 @@ public class Player extends Entity{
     }
     public void setDefaultValues(){
         
-        worldX = gp.tileSize * 25;  //starting position
-        worldY = gp.tileSize * 25;  //starting postion
+        worldX = gp.tileSize * 6;  //starting position
+        worldY = gp.tileSize * 2;  //starting postion
         speed = 4;
         direction = "down";
     }
+    //archer
     public void getPlayerImage(){
         
-        try{
-            
-            up1 = ImageIO.read(getClass().getResourceAsStream("/player/archer_up1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/player/archer_up2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/player/archer_down1.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/player/archer_down2.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/player/archer_left1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/player/archer_left2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/player/archer_right1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/player/archer_right2.png"));
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
+        up0 = setup("/player/archer_up0");
+        up1 = setup("/player/archer_up1");
+        up2 = setup("/player/archer_up2");
+        down0 = setup("/player/archer_down0");
+        down1 = setup("/player/archer_down1");
+        down2 = setup("/player/archer_down2");
+        left0 = setup("/player/archer_left0");
+        left1 = setup("/player/archer_left1");
+        left2 = setup("/player/archer_left2");
+        right0 = setup("/player/archer_right0");
+        right1 = setup("/player/archer_right1");
+        right2 = setup("/player/archer_right2");
     }
     
     public void update(){
         
         if(keyH.upPressed == true || keyH.downPressed == true || keyH.leftPressed == true || keyH.rightPressed == true){    //only moves when a key is pressed
+            
+            if(spriteNum == 0){
+                spriteNum = 1;
+            }
             
             if(keyH.upPressed == true){
                 direction = "up";
@@ -87,6 +92,10 @@ public class Player extends Entity{
             int objIndex = gp.cChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
+            //CHECK NPC COLLISION
+            int npcIndex = gp.cChecker.checkEntity(this, gp.npc);
+            interactNPC(npcIndex);
+            
             // IF COLLITION IS FALSE, PLAYER CAN MOVE
             if(collisionOn == false){
                 
@@ -110,44 +119,30 @@ public class Player extends Entity{
             }
             
         }
+        else{
+            standCounter++;
+            
+            if(standCounter == 20){
+                spriteNum = 0;
+                standCounter = 0;
+            }
+        }
     }
     public void pickUpObject(int i){
         if(i != 999){
             
-            String objectName = gp.obj[i].name;
+        }
+    }
+    
+    public void interactNPC(int i){
+        if(i != 999){
             
-            switch(objectName){
-                case "Key":
-                    gp.playSE(1);
-                    hasKey++;
-                    gp.obj[i] = null;   //removes key object
-                    gp.ui.showMessage("You got a Key");
-                    
-                    break;
-                case "Door":
-                    if(hasKey > 0){
-                        gp.playSE(3);
-                        gp.obj[i] = null;   //removes door object
-                        hasKey--;
-                        gp.ui.showMessage("You opened a door!");
-                    }
-                    else{
-                        gp.ui.showMessage("You don't have a Key...");
-                    }
-                    break;
-                case "Boots":
-                    gp.playSE(2);
-                    speed += 2;
-                    gp.obj[i] = null;   //removes boots after picking up
-                    gp.ui.showMessage("Speed Up!");
-                    break;
-                case "Chest":
-                    gp.ui.gameFinished = true;
-                    gp.stopMusic();
-                    gp.playSE(4);
-                    break;
+            if(gp.keyH.spacePressed == true){
+                gp.gameState = gp.dialogueState;
+                gp.npc[i].speak();
             }
         }
+        gp.keyH.spacePressed = false; 
     }
     
     public void draw(Graphics2D g2){
@@ -159,6 +154,9 @@ public class Player extends Entity{
         
         switch(direction){
             case "up":
+                if(spriteNum == 0){
+                    image = up0;
+                }
                 if(spriteNum == 1){
                     image = up1;
                 }
@@ -167,6 +165,9 @@ public class Player extends Entity{
                 }
                 break;  
             case "down":
+                if(spriteNum == 0){
+                    image = down0;
+                }
                 if(spriteNum == 1){
                     image = down1;
                 }
@@ -175,6 +176,9 @@ public class Player extends Entity{
                 }
                 break;
             case "left":
+                if(spriteNum == 0){
+                    image = left0;
+                }
                 if(spriteNum == 1){
                     image = left1;
                 }
@@ -183,14 +187,17 @@ public class Player extends Entity{
                 }
                 break;
             case"right":
+                if(spriteNum == 0){
+                    image = right0;
+                }
                 if(spriteNum == 1){
                     image = right1;
                 }
                 if(spriteNum == 2){
                     image = right2;
                 }
-                break;   
+                break; 
         }
-        g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);  //given image, xaxis, y axis, wight height, null?
+        g2.drawImage(image, screenX, screenY, null);  //given image, xaxis, y axis, wight height, null?
     }
 }
