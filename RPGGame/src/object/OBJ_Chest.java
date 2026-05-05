@@ -1,31 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package object;
 
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import entity.Entity;
 import rpggame.GamePanel;
 
-/**
- *
- * @author Admin
- */
-public class OBJ_Chest extends SuperObject{
-    
-    GamePanel gp;
+public class OBJ_Chest extends Entity{
     
     public OBJ_Chest(GamePanel gp){
+        super(gp);
         
         name = "Chest";
-        try{
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/chest.png"));
-            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
+        down1 = setup("/objects/chest", gp.tileSize, gp.tileSize);
+       
         collision = true;
     }
 }

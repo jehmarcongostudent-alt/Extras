@@ -7,7 +7,7 @@ public class KeyHandler implements KeyListener{
     
     GamePanel gp;
     
-    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, enterPressed;
     //DEBUG
     boolean checkDrawTime = false;
     
@@ -71,20 +71,36 @@ public class KeyHandler implements KeyListener{
                     if(gp.ui.commandNum == 0){
                         System.out.println("Do some archer specific stuuff");
                         gp.gameState = gp.playState;
+                        gp.player.playerClass = "archer";
                         gp.playMusic(0);
                     }
                     if(gp.ui.commandNum == 1){
                         System.out.println("Do some warroior specific stuuff");
+                        
+                        gp.player.playerClass = "warrior";
+                        gp.player.playerClasses();  //reruns this
+                        gp.player.getPlayerImage(); //reloads player image
+                        
                         gp.gameState = gp.playState;
                         gp.playMusic(0);
                     }
                     if(gp.ui.commandNum == 2){
                         System.out.println("Do some mage specific stuuff");
+                        
+                        gp.player.playerClass = "mage";
+                        gp.player.playerClasses();  //reruns this
+                        gp.player.getPlayerImage(); //reloads player image
+                        
                         gp.gameState = gp.playState;
                         gp.playMusic(0);
                     }
                     if(gp.ui.commandNum == 3){
                         System.out.println("Do some tank specific stuuff");
+                        
+                        gp.player.playerClass = "tank";
+                        gp.player.playerClasses();  //reruns this
+                        gp.player.getPlayerImage(); //reloads player image
+                        
                         gp.gameState = gp.playState;
                         gp.playMusic(0);
                     }
@@ -97,7 +113,7 @@ public class KeyHandler implements KeyListener{
         }
         
         //PLAY STATE
-        if(gp.gameState == gp.playState){
+        else if(gp.gameState == gp.playState){
            
             if(code == KeyEvent.VK_W || code == KeyEvent.VK_UP){
                 upPressed = true;
@@ -116,6 +132,9 @@ public class KeyHandler implements KeyListener{
             }
             if(code == KeyEvent.VK_SPACE){
                 spacePressed = true;
+            }
+            if(code == KeyEvent.VK_ENTER){
+                enterPressed = true;
             }
 
             //DEBUG

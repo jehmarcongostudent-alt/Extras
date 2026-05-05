@@ -1,28 +1,25 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package object;
 
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import entity.Entity;
 import rpggame.GamePanel;
 
-public class OBJ_Door extends SuperObject{
-    
-    GamePanel gp;
+public class OBJ_Door extends Entity{
     
     public OBJ_Door(GamePanel gp){
+        super(gp);
         
         name = "Door";
-        try{
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/door.png"));
-            uTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
+        down1 = setup("/objects/door", gp.tileSize, gp.tileSize);
+        
         collision = true;
+        
+        //sets the Doors collision
+        solidArea.x = 0;
+        solidArea.y = 16;
+        solidArea.width = 40;
+        solidArea.height = 32;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
     }
     
 }

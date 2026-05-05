@@ -18,18 +18,18 @@ public class NPC_shopKeeper extends Entity{
     }
     public void getImage(){
 
-        up0 = setup("/npc/shopKeeper_up0");
-        up1 = setup("/npc/shopKeeper_up1");
-        up2 = setup("/npc/shopKeeper_up2");
-        down0 = setup("/npc/shopKeeper_down0");
-        down1 = setup("/npc/shopKeeper_down1");
-        down2 = setup("/npc/shopKeeper_down2");
-        left0 = setup("/npc/shopKeeper_left0");
-        left1 = setup("/npc/shopKeeper_left1");
-        left2 = setup("/npc/shopKeeper_left2");
-        right0 = setup("/npc/shopKeeper_right0");
-        right1 = setup("/npc/shopKeeper_right1");
-        right2 = setup("/npc/shopKeeper_right2");
+        up0 = setup("/npc/shopKeeper_up0", gp.tileSize, gp.tileSize);
+        up1 = setup("/npc/shopKeeper_up1", gp.tileSize, gp.tileSize);
+        up2 = setup("/npc/shopKeeper_up2", gp.tileSize, gp.tileSize);
+        down0 = setup("/npc/shopKeeper_down0", gp.tileSize, gp.tileSize);
+        down1 = setup("/npc/shopKeeper_down1", gp.tileSize, gp.tileSize);
+        down2 = setup("/npc/shopKeeper_down2", gp.tileSize, gp.tileSize);
+        left0 = setup("/npc/shopKeeper_left0", gp.tileSize, gp.tileSize);
+        left1 = setup("/npc/shopKeeper_left1", gp.tileSize, gp.tileSize);
+        left2 = setup("/npc/shopKeeper_left2", gp.tileSize, gp.tileSize);
+        right0 = setup("/npc/shopKeeper_right0", gp.tileSize, gp.tileSize);
+        right1 = setup("/npc/shopKeeper_right1", gp.tileSize, gp.tileSize);
+        right2 = setup("/npc/shopKeeper_right2", gp.tileSize, gp.tileSize);
     }
     public void setDialogue(){
         
