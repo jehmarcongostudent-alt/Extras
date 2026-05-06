@@ -35,16 +35,29 @@ public class AssetSetter {
     }
     public void setMonster(){
         
-        gp.monster[0] = new MON_GreenSlime(gp);
-        gp.monster[0].worldX =gp.tileSize*37;
-        gp.monster[0].worldY =gp.tileSize*43;
-        
-        gp.monster[1] = new MON_GreenSlime(gp);
-        gp.monster[1].worldX =gp.tileSize*1;
-        gp.monster[1].worldY =gp.tileSize*15;
-        
-        gp.monster[2] = new MON_GreenSlime(gp);
-        gp.monster[2].worldX =gp.tileSize*4;
-        gp.monster[2].worldY =gp.tileSize*5;
+        int i = 0;
+        gp.monster[i] = new MON_GreenSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*37;
+        gp.monster[i].worldY =gp.tileSize*43;
+        i++;
+        gp.monster[i] = new MON_GreenSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*1;
+        gp.monster[i].worldY =gp.tileSize*15;
+        i++;
+        gp.monster[i] = new MON_GreenSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*4;
+        gp.monster[i].worldY =gp.tileSize*5;
+        i++;
+        gp.monster[i] = new MON_GreenSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*5;
+        gp.monster[i].worldY =gp.tileSize*5;
+        i++;
+        gp.monster[i] = new MON_GreenSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*6;
+        gp.monster[i].worldY =gp.tileSize*5;
+        i++;
+        gp.monster[i] = new MON_GreenSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*6;
+        gp.monster[i].worldY =gp.tileSize*6;
     }
 }

@@ -10,6 +10,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import object.OBJ_Key;
+import object.OBJ_Shield_Wood;
+import object.OBJ_Sword_Normal;
 import rpggame.UtilityTool;
 
 public class Player extends Entity{
@@ -19,6 +23,9 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
     int standCounter = 0;
+    public boolean attackCanceled = false;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
     
     //player
     public String playerClass = "archer";   //setDefault class as archer
@@ -48,6 +55,7 @@ public class Player extends Entity{
         playerClasses();
         getPlayerImage();
         getPlayerAttackImage();
+        setItems();
     }
     public void setDefaultValues(){
         
@@ -57,8 +65,30 @@ public class Player extends Entity{
         direction = "down";
         
         //PLAYER STATUS
+        level = 1;
         maxLife = 6;
         life = maxLife;
+        strength = 1;   //strenth = damage
+        dexterity = 1;  //dex = less damage
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new OBJ_Sword_Normal(gp);
+        currentShield = new OBJ_Shield_Wood(gp);
+        attack = getAttack();   //total attack is from strenth and weapon
+        defense = getDefense(); //total shield is from dex and shield
+    }
+    public void setItems(){
+        
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new OBJ_Key(gp));
+    }
+    public int getAttack(){
+        return attack = strength * currentWeapon.attackValue;
+    }
+    public int getDefense(){
+        return defense = dexterity * currentShield.defenseValue;
     }
     //PLAYER CLASSES
     public void playerClasses(){
@@ -164,6 +194,13 @@ public class Player extends Entity{
                 }
             }
             
+            if(keyH.spacePressed == true && attackCanceled == false){
+                gp.playSE(7);
+                attacking = true;
+                spriteCounter = 0;
+            }
+            
+            attackCanceled = false;
             gp.keyH.spacePressed = false; 
             
             spriteCounter++;
@@ -250,7 +287,6 @@ public class Player extends Entity{
                     gp.playSE(2);
                     speed += 2;
                     gp.obj[i] = null;   //removes boots after picking up
-                    gp.ui.showMessage("Speed Up!");
                     break;
             }
         }
@@ -261,12 +297,11 @@ public class Player extends Entity{
         if(gp.keyH.spacePressed == true){
             
             if(i != 999){
+                attackCanceled = true;
                 gp.gameState = gp.dialogueState;
                 gp.npc[i].speak();
             }
-            else{
-                attacking = true;
-            }
+            
         }
     }
     public void contactMonster(int i){
@@ -274,7 +309,13 @@ public class Player extends Entity{
         if(i != 999){
             
             if(invincible == false){
-                life -= 1;
+                gp.playSE(6);
+                
+                int damage = gp.monster[i].attack - defense;
+                if(damage < 0){
+                    damage = 0;
+                }
+                life -= damage;
                 invincible = true;
             }
         }
@@ -285,19 +326,45 @@ public class Player extends Entity{
             
             if(gp.monster[i].invincible == false){
                 
-                gp.monster[i].life -= 1;
+                gp.playSE(5);
+                
+                int damage = attack - gp.monster[i].defense;
+                if(damage < 0){
+                    damage = 0;
+                }
+                gp.monster[i].life -= damage;
+                gp.ui.addMessage(damage + " damage!");
+                
                 gp.monster[i].invincible = true;
+                gp.monster[i].damageReaction();
                 
                 if(gp.monster[i].life <= 0){
-                    gp.monster[i] = null;
+                    gp.monster[i].dying = true;
+                    gp.ui.addMessage("killed the "+ gp.monster[i].name+"!");
+                    gp.ui.addMessage("Exp + "+ gp.monster[i].exp+"!");
+                    exp += gp.monster[i].exp;
+                    checkLevelUp();
                 }
             }
         }
-        else{
-            System.out.println("Miss!");
+    }
+    public void checkLevelUp(){
+        
+        if(exp >= nextLevelExp){
+            
+            level++;
+            nextLevelExp = nextLevelExp*2;  //sets the next lvl up requirement
+            maxLife += 2;
+            strength++;
+            dexterity++;
+            attack = getAttack();
+            defense = getDefense();
+            
+            gp.playSE(8);
+            gp.gameState = gp.dialogueState;
+            gp.ui.currentDialogue = "You are level " + level + " now!\n"+"You feel stronger!";
         }
     }
-    
     public void draw(Graphics2D g2){
         
         //g2.setColor(Color.white);
@@ -368,9 +435,9 @@ public class Player extends Entity{
         //Reset alpha
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         
-        //DEBUG
-        g2.setFont(new Font("Arial", Font.PLAIN, 26));
-        g2.setColor(Color.white);
-        g2.drawString("Invincible: " + invincibleCounter, 10, 400);
+        //DEBUG to view invincibility counter
+        //g2.setFont(new Font("Arial", Font.PLAIN, 26));
+        //g2.setColor(Color.white);
+        //g2.drawString("Invincible: " + invincibleCounter, 10, 400);
     }
 }
