@@ -12,7 +12,9 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
+import object.OBJ_Bow_Arrow;
 import object.OBJ_Heart;
+import object.OBJ_ManaPotion;
 
 
 public class UI {
@@ -20,7 +22,7 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     Font maruMonica, purisaB;
-    BufferedImage heart_full, heart_half, heart_empty;
+    BufferedImage heart_full, heart_half, heart_empty, bow_arrow, bow_empty;
     public boolean messageOn = false;
     ArrayList<String> message = new ArrayList<>();
     ArrayList<Integer> messageCounter = new ArrayList<>();
@@ -52,6 +54,9 @@ public class UI {
         heart_full = heart.image;
         heart_half = heart.image2;
         heart_empty = heart.image3;
+        Entity bowArrow = new OBJ_Bow_Arrow(gp);
+        bow_arrow = bowArrow.image;
+        bow_empty = bowArrow.image2;
         
     }
     
@@ -120,6 +125,26 @@ public class UI {
             }
             i++;
             x += gp.tileSize;
+        }
+        
+        //DRAW MAX ENERGY
+        x = gp.tileSize/2;
+        y = (int)(gp.tileSize*1.5);
+        i = 0;
+        while(i < gp.player.maxEnergy){
+            g2.drawImage(bow_empty, x, y, null); 
+            i++;
+            x += 41;
+        }
+        
+        //DRAW ENERGY
+        x = gp.tileSize/2;
+        y = (int)(gp.tileSize*1.5);
+        i = 0;
+        while(i < gp.player.energy){
+            g2.drawImage(bow_arrow, x, y, null);
+            i++;
+            x += 41;
         }
     }
     public void drawMessage(){
@@ -303,6 +328,8 @@ public class UI {
         textY += lineHeight;
         g2.drawString("Life", textX, textY);
         textY += lineHeight;
+        g2.drawString("Energy", textX, textY);
+        textY += lineHeight;
         g2.drawString("Strength", textX, textY);
         textY += lineHeight;
         g2.drawString("Dexterity", textX, textY);
@@ -316,7 +343,7 @@ public class UI {
         g2.drawString("Next Level", textX, textY);
         textY += lineHeight;
         g2.drawString("Coin", textX, textY);
-        textY += lineHeight + 20;
+        textY += lineHeight + 10;
         g2.drawString("Weapon", textX, textY);
         textY += lineHeight + 15;
         g2.drawString("Shield", textX, textY);
@@ -334,6 +361,11 @@ public class UI {
         textY += lineHeight;
 
         value = String.valueOf(gp.player.life+"/"+gp.player.maxLife);
+        textX = getXforAlignToRightText(value,tailX);
+        g2.drawString(value, textX, textY);
+        textY += lineHeight;
+
+        value = String.valueOf(gp.player.energy+"/"+gp.player.maxEnergy);
         textX = getXforAlignToRightText(value,tailX);
         g2.drawString(value, textX, textY);
         textY += lineHeight;
@@ -373,9 +405,9 @@ public class UI {
         g2.drawString(value, textX, textY);
         textY += lineHeight;
         
-        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY-14, null);
+        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY-24, null);
         textY += gp.tileSize;
-        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY-14, null);
+        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY-24, null);
         
     }
     public void drawInventory(){
@@ -396,6 +428,12 @@ public class UI {
         
         //DRAW PLAYER'S ITEMS
         for(int i = 0; i < gp.player.inventory.size(); i++){
+            
+            //EQUIP CURSOR
+            if(gp.player.inventory.get(i) == gp.player.currentWeapon || gp.player.inventory.get(i) == gp.player.currentShield){
+                g2.setColor(new Color(240, 190, 90));
+                g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
+            }
             
             g2.drawImage(gp.player.inventory.get(i).down1, slotX, slotY, null);
             

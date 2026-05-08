@@ -7,7 +7,7 @@ public class KeyHandler implements KeyListener{
     
     GamePanel gp;
     
-    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, enterPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, enterPressed, shotKeyPressed;
     //DEBUG
     boolean showDebugText = false;
     
@@ -95,7 +95,7 @@ public class KeyHandler implements KeyListener{
                     System.out.println("Do some archer specific stuuff");
                     gp.gameState = gp.playState;
                     gp.player.playerClass = "archer";
-                    gp.playMusic(0);
+                    //gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 1){
                     System.out.println("Do some warroior specific stuuff");
@@ -105,7 +105,7 @@ public class KeyHandler implements KeyListener{
                     gp.player.getPlayerImage(); //reloads player image
 
                     gp.gameState = gp.playState;
-                    gp.playMusic(0);
+                    //gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 2){
                     System.out.println("Do some mage specific stuuff");
@@ -115,7 +115,7 @@ public class KeyHandler implements KeyListener{
                     gp.player.getPlayerImage(); //reloads player image
 
                     gp.gameState = gp.playState;
-                    gp.playMusic(0);
+                    //gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 3){
                     System.out.println("Do some tank specific stuuff");
@@ -125,7 +125,7 @@ public class KeyHandler implements KeyListener{
                     gp.player.getPlayerImage(); //reloads player image
 
                     gp.gameState = gp.playState;
-                    gp.playMusic(0);
+                    //gp.playMusic(0);
                 }
                 if(gp.ui.commandNum == 4){
                     gp.ui.titleScreenState = 0;
@@ -159,6 +159,9 @@ public class KeyHandler implements KeyListener{
         }
         if(code == KeyEvent.VK_ENTER){
             enterPressed = true;
+        }
+        if(code == KeyEvent.VK_F){
+            shotKeyPressed = true;
         }
 
         //DEBUG
@@ -217,7 +220,9 @@ public class KeyHandler implements KeyListener{
                 gp.playSE(9);
             }
         }
-        
+        if(code == KeyEvent.VK_SPACE || code == KeyEvent.VK_ENTER){
+            gp.player.selectItem();
+        }
     }
     
     @Override
@@ -236,6 +241,9 @@ public class KeyHandler implements KeyListener{
         }
         if(code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT){
             rightPressed = false;
+        }
+        if(code == KeyEvent.VK_F){
+            shotKeyPressed = false;
         }
     }
 }

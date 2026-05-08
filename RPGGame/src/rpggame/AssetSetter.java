@@ -5,6 +5,7 @@
 package rpggame;
 
 import entity.NPC_shopKeeper;
+import monster.MON_BrownSlime;
 import monster.MON_GreenSlime;
 import object.*;
 
@@ -18,13 +19,52 @@ public class AssetSetter {
     
     public void setObject(){
         
-        gp.obj[1] = new OBJ_Boots(gp);
-        gp.obj[1].worldX = gp.tileSize*15;
-        gp.obj[1].worldY = gp.tileSize*3;
+        int i = 0;
+        gp.obj[i] = new OBJ_Boots(gp);
+        gp.obj[i].worldX = gp.tileSize*15;
+        gp.obj[i].worldY = gp.tileSize*3;
+        i++;
+        gp.obj[i] = new OBJ_Boots(gp);
+        gp.obj[i].worldX = gp.tileSize*16;
+        gp.obj[i].worldY = gp.tileSize*3;
+        i++;
+        gp.obj[i] = new OBJ_Coin_Bronze(gp);
+        gp.obj[i].worldX = gp.tileSize*13;
+        gp.obj[i].worldY = gp.tileSize*2;
+        i++;
+        gp.obj[i] = new OBJ_Coin_Bronze(gp);
+        gp.obj[i].worldX = gp.tileSize*12;
+        gp.obj[i].worldY = gp.tileSize*2;
+        i++;
+        gp.obj[i] = new OBJ_Key(gp);
+        gp.obj[i].worldX = gp.tileSize*11;
+        gp.obj[i].worldY = gp.tileSize*2;
+        i++;
+        gp.obj[i] = new OBJ_Axe(gp);
+        gp.obj[i].worldX = gp.tileSize*10;
+        gp.obj[i].worldY = gp.tileSize*2;
+        i++;
+        gp.obj[i] = new OBJ_Shield_Blue(gp);
+        gp.obj[i].worldX = gp.tileSize*10;
+        gp.obj[i].worldY = gp.tileSize*10;
+        i++;
+        gp.obj[i] = new OBJ_Potion_Red(gp);
+        gp.obj[i].worldX = gp.tileSize*3;
+        gp.obj[i].worldY = gp.tileSize*11;
+        i++;
+        gp.obj[i] = new OBJ_Potion_Red(gp);
+        gp.obj[i].worldX = gp.tileSize*6;
+        gp.obj[i].worldY = gp.tileSize*21;
         
-        gp.obj[2] = new OBJ_Boots(gp);
-        gp.obj[2].worldX = gp.tileSize*16;
-        gp.obj[2].worldY = gp.tileSize*3;
+        i++;
+        gp.obj[i] = new OBJ_Heart(gp);
+        gp.obj[i].worldX = gp.tileSize*7;
+        gp.obj[i].worldY = gp.tileSize*21;
+        
+        i++;
+        gp.obj[i] = new OBJ_Bow_Arrow(gp);
+        gp.obj[i].worldX = gp.tileSize*8;
+        gp.obj[i].worldY = gp.tileSize*21;
         
     }
     public void setNPC(){
@@ -59,5 +99,9 @@ public class AssetSetter {
         gp.monster[i] = new MON_GreenSlime(gp);
         gp.monster[i].worldX =gp.tileSize*6;
         gp.monster[i].worldY =gp.tileSize*6;
+        i++;
+        gp.monster[i] = new MON_BrownSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*7;
+        gp.monster[i].worldY =gp.tileSize*7;
     }
 }

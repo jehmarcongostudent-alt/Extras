@@ -2,6 +2,9 @@ package monster;
 
 import entity.Entity;
 import java.util.Random;
+import object.OBJ_Bow_Arrow;
+import object.OBJ_Coin_Bronze;
+import object.OBJ_Heart;
 import rpggame.GamePanel;
 
 public class MON_GreenSlime extends Entity{
@@ -13,7 +16,7 @@ public class MON_GreenSlime extends Entity{
         
         this.gp = gp;
         
-        type = 2;   //type 2 means monster
+        type = type_monster;
         name = "Green Slime";
         speed = 1;
         maxLife = 4;
@@ -71,6 +74,22 @@ public class MON_GreenSlime extends Entity{
         
         actionLockCounter = 0;
         direction = gp.player.direction;
+    }
+    public void checkDrop(){
+        
+        //CAST A DIE(random number)
+        int i = new Random().nextInt(100)+1;
+        
+        //SET THE MONSTER DROP
+        if(i < 50){
+            dropItem(new OBJ_Coin_Bronze(gp));
+        }
+        if(i >= 50 && i < 75){
+            dropItem(new OBJ_Heart(gp));
+        }
+        if(i >= 75 && i < 100){
+            dropItem(new OBJ_Bow_Arrow(gp));
+        }
     }
     
 }

@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import object.OBJ_Arrow;
 import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
@@ -48,8 +49,8 @@ public class Player extends Entity{
         solidArea.width = 28;
         solidArea.height = 16;
         
-        attackArea.width = 36;
-        attackArea.height = 36;
+        //attackArea.width = 36;
+        //attackArea.height = 36;
         
         setDefaultValues();
         playerClasses();
@@ -68,6 +69,8 @@ public class Player extends Entity{
         level = 1;
         maxLife = 6;
         life = maxLife;
+        maxEnergy = 5;
+        energy = maxEnergy;
         strength = 1;   //strenth = damage
         dexterity = 1;  //dex = less damage
         exp = 0;
@@ -75,6 +78,7 @@ public class Player extends Entity{
         coin = 0;
         currentWeapon = new OBJ_Sword_Normal(gp);
         currentShield = new OBJ_Shield_Wood(gp);
+        projectile = new OBJ_Arrow(gp);
         attack = getAttack();   //total attack is from strenth and weapon
         defense = getDefense(); //total shield is from dex and shield
     }
@@ -85,6 +89,7 @@ public class Player extends Entity{
         inventory.add(new OBJ_Key(gp));
     }
     public int getAttack(){
+        attackArea = currentWeapon.attackArea;
         return attack = strength * currentWeapon.attackValue;
     }
     public int getDefense(){
@@ -111,7 +116,6 @@ public class Player extends Entity{
                 break;
         }
     }
-    
     public void getPlayerImage(){
         
         up0 = setup("/player/"+avatar+"/"+avatar+"_up0", gp.tileSize, gp.tileSize);
@@ -129,16 +133,27 @@ public class Player extends Entity{
     }
     public void getPlayerAttackImage(){
         
-        attackUp0 = setup("/player/"+avatar+"/"+avatar+"_attack_up0", gp.tileSize, gp.tileSize*2);
-        attackUp1 = setup("/player/"+avatar+"/"+avatar+"_attack_up1", gp.tileSize, gp.tileSize*2);
-        attackDown0 = setup("/player/"+avatar+"/"+avatar+"_attack_down0", gp.tileSize, gp.tileSize*2);
-        attackDown1 = setup("/player/"+avatar+"/"+avatar+"_attack_down1", gp.tileSize, gp.tileSize*2);
-        attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_attack_left0", gp.tileSize*2, gp.tileSize);
-        attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_attack_left1", gp.tileSize*2, gp.tileSize);
-        attackRight0 = setup("/player/"+avatar+"/"+avatar+"_attack_right0", gp.tileSize*2, gp.tileSize);
-        attackRight1 = setup("/player/"+avatar+"/"+avatar+"_attack_right1", gp.tileSize*2, gp.tileSize);
+        if(currentWeapon.type == type_sword){
+            attackUp0 = setup("/player/"+avatar+"/"+avatar+"_attack_up0", gp.tileSize, gp.tileSize*2);
+            attackUp1 = setup("/player/"+avatar+"/"+avatar+"_attack_up1", gp.tileSize, gp.tileSize*2);
+            attackDown0 = setup("/player/"+avatar+"/"+avatar+"_attack_down0", gp.tileSize, gp.tileSize*2);
+            attackDown1 = setup("/player/"+avatar+"/"+avatar+"_attack_down1", gp.tileSize, gp.tileSize*2);
+            attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_attack_left0", gp.tileSize*2, gp.tileSize);
+            attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_attack_left1", gp.tileSize*2, gp.tileSize);
+            attackRight0 = setup("/player/"+avatar+"/"+avatar+"_attack_right0", gp.tileSize*2, gp.tileSize);
+            attackRight1 = setup("/player/"+avatar+"/"+avatar+"_attack_right1", gp.tileSize*2, gp.tileSize);
+        }
+        if(currentWeapon.type == type_axe){
+            attackUp0 = setup("/player/"+avatar+"/"+avatar+"_axe_up0", gp.tileSize, gp.tileSize*2);
+            attackUp1 = setup("/player/"+avatar+"/"+avatar+"_axe_up1", gp.tileSize, gp.tileSize*2);
+            attackDown0 = setup("/player/"+avatar+"/"+avatar+"_axe_down0", gp.tileSize, gp.tileSize*2);
+            attackDown1 = setup("/player/"+avatar+"/"+avatar+"_axe_down1", gp.tileSize, gp.tileSize*2);
+            attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_axe_left0", gp.tileSize*2, gp.tileSize);
+            attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_axe_left1", gp.tileSize*2, gp.tileSize);
+            attackRight0 = setup("/player/"+avatar+"/"+avatar+"_axe_right0", gp.tileSize*2, gp.tileSize);
+            attackRight1 = setup("/player/"+avatar+"/"+avatar+"_axe_right1", gp.tileSize*2, gp.tileSize);
+        }
     }
-    
     public void update(){
         
         if(attacking == true){
@@ -224,6 +239,22 @@ public class Player extends Entity{
             }
         }
         
+        if(gp.keyH.shotKeyPressed == true && projectile.alive == false && shotAvailableCounter == 30 && projectile.haveResource(this) == true){
+            
+            //SET DEFAULT COORDINATES, DIRECTION, AND USER
+            projectile.set(worldX, worldY, direction, true, this);
+            
+            //SUBTRACT THE COST(MANA, ARROW, ETC)
+            projectile.subtractResource(this);
+        
+            //ADD IT TO THE LIST
+            gp.projectileList.add(projectile);
+            
+            shotAvailableCounter = 0;
+            
+            gp.playSE(10);
+        }
+        
         //This needs to be outside of key if statement!
         if(invincible == true){
             invincibleCounter++;
@@ -231,6 +262,15 @@ public class Player extends Entity{
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if(shotAvailableCounter < 30){
+            shotAvailableCounter++;
+        }
+        if(life > maxLife){
+            life = maxLife;
+        }
+        if(energy > maxEnergy){
+            energy = maxEnergy;
         }
     }
     public void attacking(){
@@ -262,7 +302,7 @@ public class Player extends Entity{
             solidArea.height = attackArea.height;
             //Check monster collision with the updated worldX, worldY, and solidArea
             int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-            damageMonster(monsterIndex);
+            damageMonster(monsterIndex, attack);
             
             //After checking collision, restore the original data
             worldX = currentWorldX;
@@ -280,18 +320,32 @@ public class Player extends Entity{
     public void pickUpObject(int i){
         if(i != 999){
             
-            String objectName = gp.obj[i].name;
-            
-            switch(objectName){
-                case "Boots":
-                    gp.playSE(2);
-                    speed += 2;
-                    gp.obj[i] = null;   //removes boots after picking up
-                    break;
+            //PICKUP ONLY ITEMS
+            if(gp.obj[i].type == type_pickupOnly){
+                
+                gp.obj[i].use(this);
+                gp.obj[i] = null;
             }
+            
+            //INVENTORY ITEMS
+            else{
+                String text;
+            
+                if(inventory.size() != maxInventorySize){
+
+                    inventory.add(gp.obj[i]);
+                    gp.playSE(1);
+                    text = "Got a "+ gp.obj[i].name + "!";
+                }
+                else{
+                    text = "You cannot carry any more!";
+                }
+                gp.ui.addMessage(text);
+                gp.obj[i] = null;
+            }
+            
         }
     }
-    
     public void interactNPC(int i){
         
         if(gp.keyH.spacePressed == true){
@@ -308,7 +362,7 @@ public class Player extends Entity{
         
         if(i != 999){
             
-            if(invincible == false){
+            if(invincible == false && gp.monster[i].dying == false){
                 gp.playSE(6);
                 
                 int damage = gp.monster[i].attack - defense;
@@ -320,7 +374,7 @@ public class Player extends Entity{
             }
         }
     }
-    public void damageMonster(int i){
+    public void damageMonster(int i, int attack){
         
         if(i != 999){
             
@@ -363,6 +417,32 @@ public class Player extends Entity{
             gp.playSE(8);
             gp.gameState = gp.dialogueState;
             gp.ui.currentDialogue = "You are level " + level + " now!\n"+"You feel stronger!";
+        }
+    }
+    public void selectItem(){
+        
+        int itemIndex = gp.ui.getItemIndexOnSlot();
+        
+        if (itemIndex < inventory.size()){
+            
+            Entity selectedItem = inventory.get(itemIndex);
+            
+            if (selectedItem.type == type_sword || selectedItem.type == type_axe){
+                
+                currentWeapon = selectedItem;
+                attack = getAttack();
+                getPlayerAttackImage();
+            }
+            if(selectedItem.type == type_shield){
+                
+                currentShield = selectedItem;
+                defense = getDefense();
+            }
+            if(selectedItem.type == type_consumable){
+                
+                selectedItem.use(this);
+                inventory.remove(itemIndex);
+            }
         }
     }
     public void draw(Graphics2D g2){

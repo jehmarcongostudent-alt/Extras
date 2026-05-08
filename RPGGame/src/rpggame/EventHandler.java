@@ -108,6 +108,7 @@ public class EventHandler {
             gp.playSE(2);
             gp.ui.currentDialogue = "You drink the purified water\nYou're life has been recovered";
             gp.player.life = gp.player.maxLife;
+            gp.player.energy = gp.player.maxEnergy;
             gp.aSetter.setMonster();    //respawns monsters
         }
         

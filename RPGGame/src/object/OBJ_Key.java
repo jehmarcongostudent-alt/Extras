@@ -12,6 +12,6 @@ public class OBJ_Key extends Entity{
         
         name = "Key";
         down1 = setup("/objects/key", gp.tileSize, gp.tileSize);
-        description = "{" + name + "]It opens a door.";
+        description = "[" + name + "]It opens a door.";
     }
 }
