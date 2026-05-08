@@ -9,18 +9,18 @@ import object.OBJ_Heart;
 import object.OBJ_Rock;
 import rpggame.GamePanel;
 
-public class MON_BrownSlime extends Entity{
+public class MON_shopKeeperTwin extends Entity{
     
     GamePanel gp;
     
-    public MON_BrownSlime(GamePanel gp) {
+    public MON_shopKeeperTwin(GamePanel gp) {
         super(gp);
         
         this.gp = gp;
         
         type = type_monster;
-        name = "Brown Slime";
-        speed = 1;
+        name = "Drunk Man";
+        speed = 2;
         maxLife = 6;
         life = maxLife;
         attack = 5;
@@ -39,14 +39,14 @@ public class MON_BrownSlime extends Entity{
     }
     public void getImage(){
         
-        up1 = setup("/monster/brownSlime_down0", gp.tileSize, gp.tileSize);
-        up2 = setup("/monster/brownSlime_down1", gp.tileSize, gp.tileSize);
-        down1 = setup("/monster/brownSlime_down0", gp.tileSize, gp.tileSize);
-        down2 = setup("/monster/brownSlime_down1", gp.tileSize, gp.tileSize);
-        left1 = setup("/monster/brownSlime_down0", gp.tileSize, gp.tileSize);
-        left2 = setup("/monster/brownSlime_down1", gp.tileSize, gp.tileSize);
-        right1 = setup("/monster/brownSlime_down0", gp.tileSize, gp.tileSize);
-        right2 = setup("/monster/brownSlime_down1", gp.tileSize, gp.tileSize);
+        up1 = setup("/npc/shopKeeper_up1", gp.tileSize, gp.tileSize);
+        up2 = setup("/npc/shopKeeper_up2", gp.tileSize, gp.tileSize);
+        down1 = setup("/npc/shopKeeper_down1", gp.tileSize, gp.tileSize);
+        down2 = setup("/npc/shopKeeper_down2", gp.tileSize, gp.tileSize);
+        left1 = setup("/npc/shopKeeper_left1", gp.tileSize, gp.tileSize);
+        left2 = setup("/npc/shopKeeper_left2", gp.tileSize, gp.tileSize);
+        right1 = setup("/npc/shopKeeper_right1", gp.tileSize, gp.tileSize);
+        right2 = setup("/npc/shopKeeper_right2", gp.tileSize, gp.tileSize);
     }
     public void setAction(){
         
@@ -92,16 +92,16 @@ public class MON_BrownSlime extends Entity{
         int i = new Random().nextInt(100)+1;
         
         //SET THE MONSTER DROP
-        if(i < 25){
+        if(i < 10){
             dropItem(new OBJ_Coin_Bronze(gp));
         }
-        if(i >= 25 && i < 50){
+        if(i >= 10 && i < 30){
             dropItem(new OBJ_Heart(gp));
         }
-        if(i >= 50 && i < 90){
+        if(i >= 30 && i < 75){
             dropItem(new OBJ_Bow_Arrow(gp));
         }
-        if(i >= 90 && i < 100){
+        if(i >= 30 && i < 100){
             dropItem(new OBJ_Boots(gp));
         }
     }

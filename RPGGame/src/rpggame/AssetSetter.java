@@ -7,7 +7,9 @@ package rpggame;
 import entity.NPC_shopKeeper;
 import monster.MON_BrownSlime;
 import monster.MON_GreenSlime;
+import monster.MON_shopKeeperTwin;
 import object.*;
+import tile_interactive.IT_DryTree;
 
 public class AssetSetter {
     
@@ -77,7 +79,7 @@ public class AssetSetter {
         
         int i = 0;
         gp.monster[i] = new MON_GreenSlime(gp);
-        gp.monster[i].worldX =gp.tileSize*37;
+        gp.monster[i].worldX =gp.tileSize*36;
         gp.monster[i].worldY =gp.tileSize*43;
         i++;
         gp.monster[i] = new MON_GreenSlime(gp);
@@ -101,7 +103,38 @@ public class AssetSetter {
         gp.monster[i].worldY =gp.tileSize*6;
         i++;
         gp.monster[i] = new MON_BrownSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*6;
+        gp.monster[i].worldY =gp.tileSize*9;
+        i++;
+        gp.monster[i] = new MON_BrownSlime(gp);
         gp.monster[i].worldX =gp.tileSize*7;
-        gp.monster[i].worldY =gp.tileSize*7;
+        gp.monster[i].worldY =gp.tileSize*9;
+        i++;
+        gp.monster[i] = new MON_BrownSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*8;
+        gp.monster[i].worldY =gp.tileSize*9;
+        
+        i++;
+        gp.monster[i] = new MON_BrownSlime(gp);
+        gp.monster[i].worldX =gp.tileSize*9;
+        gp.monster[i].worldY =gp.tileSize*9;
+        i++;
+        gp.monster[i] = new MON_shopKeeperTwin(gp);
+        gp.monster[i].worldX =gp.tileSize*37;
+        gp.monster[i].worldY =gp.tileSize*43;
+        
+    }
+    public void setInteractiveTile(){
+        
+        int i = 0;
+        gp.iTile[i] = new IT_DryTree(gp,35,39);i++;
+        
+        //TEST
+        gp.iTile[i] = new IT_DryTree(gp,5,24);i++;
+        gp.iTile[i] = new IT_DryTree(gp,21,13);i++;
+        gp.iTile[i] = new IT_DryTree(gp,22,13);i++;
+        gp.iTile[i] = new IT_DryTree(gp,23,13);i++;
+        gp.iTile[i] = new IT_DryTree(gp,24,13);i++;
+        gp.iTile[i] = new IT_DryTree(gp,25,13);i++;
     }
 }
