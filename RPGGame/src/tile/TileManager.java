@@ -16,7 +16,7 @@ public class TileManager {
     
     GamePanel gp;
     public Tile[] tile;
-    public int mapTileNum[][];
+    public int mapTileNum[][][];
     //drawPath??
     ArrayList<String> fileNames = new ArrayList<>();
     ArrayList<String> collisionStatus = new ArrayList<>();
@@ -57,7 +57,7 @@ public class TileManager {
             
             gp.maxWorldCol = maxTile.length;
             gp.maxWorldRow = maxTile.length;
-            mapTileNum = new int[gp.maxWorldCol][gp.maxWorldRow]; //stores the map numbers here 
+            mapTileNum = new int[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow]; //stores the map numbers here 
                     
             br.close();
             
@@ -66,7 +66,8 @@ public class TileManager {
             System.out.println("Exception!");
         }
         
-        loadMap("/maps/world01.txt");    //edit in future to be //loadMap("/maps/sample.txt, 0");
+        loadMap("/maps/world01.txt", 0);
+        loadMap("/maps/shop.txt", 1);
         
         //loadMap("/maps/world01.txt");
     }
@@ -109,7 +110,7 @@ public class TileManager {
         
     }
     
-    public void loadMap(String filePath){
+    public void loadMap(String filePath, int map){
         
         try{
             InputStream is = getClass().getResourceAsStream(filePath); // Get the path of the map file and open it as a stream of data. //InputStream is: This creates a "pipe" (stream) connected to that file. It doesn't read the text yet; it just opens the door so you can start pulling data out of it.
@@ -128,7 +129,7 @@ public class TileManager {
                     
                     int num = Integer.parseInt(numbers[col]);
                     
-                    mapTileNum[col][row] = num;  //this stores the extracted numbers intothe mapTileNum[][]
+                    mapTileNum[map][col][row] = num;  //this stores the extracted numbers intothe mapTileNum[][]
                     col++;
                 }
                 if(col == gp.maxWorldCol){
@@ -151,7 +152,7 @@ public class TileManager {
         
         while(worldCol < gp.maxWorldCol && worldRow < gp.maxWorldRow){
             
-            int tileNum = mapTileNum[worldCol][worldRow];
+            int tileNum = mapTileNum[gp.currentMap][worldCol][worldRow];
             
             int worldX = worldCol * gp.tileSize;
             int worldY = worldRow * gp.tileSize;

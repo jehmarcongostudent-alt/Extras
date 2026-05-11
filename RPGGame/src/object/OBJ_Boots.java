@@ -15,6 +15,8 @@ public class OBJ_Boots extends Entity{
         name = "Boots";
         value = 2;
         down1 = setup("/objects/shoes1", gp.tileSize, gp.tileSize);
+        description = "currently a temporary item";
+        price = 25;
         
         //collision = true;
     }

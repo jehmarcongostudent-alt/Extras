@@ -1,36 +1,43 @@
 package rpggame;
 
-import java.awt.Rectangle;
+import entity.Entity;
 
 public class EventHandler {
     
     GamePanel gp;
-    EventRect eventRect[][];
+    EventRect eventRect[][][];
     
     int previousEventX, previousEventY;
     boolean canTouchEvent = true;
+    int tempMap, tempCol ,tempRow;
     
     public EventHandler(GamePanel gp){
         this.gp = gp;
         
-        eventRect = new EventRect[gp.maxWorldCol][gp.maxWorldRow];
+        eventRect = new EventRect[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
         
+        int map = 0;
         int col = 0;
         int row = 0;
-        while(col < gp.maxWorldCol && row < gp.maxWorldRow){
+        while(map < gp.maxMap && col < gp.maxWorldCol && row < gp.maxWorldRow){
             
-            eventRect[col][row] = new EventRect();
-            eventRect[col][row].x = 23;
-            eventRect[col][row].y = 23;
-            eventRect[col][row].width = 2;
-            eventRect[col][row].height = 2;
-            eventRect[col][row].eventRectDefaultX = eventRect[col][row].x;
-            eventRect[col][row].eventRectDefaultY = eventRect[col][row].y;
+            eventRect[map][col][row] = new EventRect();
+            eventRect[map][col][row].x = 17;
+            eventRect[map][col][row].y = 17;
+            eventRect[map][col][row].width = 14;
+            eventRect[map][col][row].height = 14;
+            eventRect[map][col][row].eventRectDefaultX = eventRect[map][col][row].x;
+            eventRect[map][col][row].eventRectDefaultY = eventRect[map][col][row].y;
             
             col++;
             if(col == gp.maxWorldCol){
                 col = 0;
                 row++;
+                
+                if(row == gp.maxWorldRow){
+                    row = 0;
+                    map++;
+                }
             }
         }
         
@@ -50,49 +57,56 @@ public class EventHandler {
         if(canTouchEvent == true){
             
             //ALL EVENTS HERE
-            if(hit(37,43,"right") == true){damagePit(37,43,gp.dialogueState); }   //x, y, facing posittion
-            if(hit(13,2,"right") == true){damagePit(13,2,gp.dialogueState); }
-            if(hit(1,15,"any") == true){damagePit(13,2,gp.dialogueState); }
-            if(hit(13,3,"any") == true){healingPool(gp.dialogueState); }
-            if(hit(16,4,"any") == true){teleport(gp.dialogueState); }
+            if(hit(0,37,43,"right") == true){damagePit(gp.dialogueState); }   //x, y, facing posittion
+            else if(hit(0,13,2,"right") == true){damagePit(gp.dialogueState); }
+            else if(hit(0,1,15,"any") == true){damagePit(gp.dialogueState); }
+            else if(hit(0,13,3,"any") == true){healingPool(gp.dialogueState); }
+            else if(hit(0,21,24,"any") == true){teleport(1,26,27); }
+            else if(hit(1,26,27,"any") == true){teleport(0,21,24); }
+            else if(hit(1,26,24,"up") == true){speak(gp.npc[1][0]);}
             
         }
         
     }
     //OBJECT THAT DETECTS EVENT COLLISION
-    public boolean hit(int col, int row, String reqDirection){
+    public boolean hit(int map, int col, int row, String reqDirection){
         
         boolean hit = false;
         
-        gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
-        gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
-        eventRect[col][row].x = col*gp.tileSize + eventRect[col][row].x;
-        eventRect[col][row].y = row*gp.tileSize + eventRect[col][row].y;
-        
-        if(gp.player.solidArea.intersects(eventRect[col][row]) && eventRect[col][row].eventDone == false){
-            if(gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")){
-                hit = true;
-                
-                previousEventX = gp.player.worldX;
-                previousEventY = gp.player.worldY;
+        if(map == gp.currentMap){ 
+            gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+            gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+            eventRect[map][col][row].x = col*gp.tileSize + eventRect[map][col][row].x;
+            eventRect[map][col][row].y = row*gp.tileSize + eventRect[map][col][row].y;
+
+            if(gp.player.solidArea.intersects(eventRect[map][col][row]) && eventRect[map][col][row].eventDone == false){
+                if(gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")){
+                    hit = true;
+
+                    previousEventX = gp.player.worldX;
+                    previousEventY = gp.player.worldY;
+                }
             }
+
+            gp.player.solidArea.x = gp.player.solidAreaDefaultX;
+            gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+            eventRect[map][col][row].x = eventRect[map][col][row].eventRectDefaultX;
+            eventRect[map][col][row].y = eventRect[map][col][row].eventRectDefaultY;
         }
         
-        gp.player.solidArea.x = gp.player.solidAreaDefaultX;
-        gp.player.solidArea.y = gp.player.solidAreaDefaultY;
-        eventRect[col][row].x = eventRect[col][row].eventRectDefaultX;
-        eventRect[col][row].y = eventRect[col][row].eventRectDefaultY;
         
         return hit;
         
     }
-    public void teleport(int gameState){
-        gp.gameState = gameState;
-        gp.ui.currentDialogue = "Teleport";
-        gp.player.worldX = gp.tileSize*46;
-        gp.player.worldY = gp.tileSize*46;
+    public void teleport(int map, int col, int row){
+        gp.gameState = gp.transitionState;
+        tempMap = map;
+        tempCol = col;
+        tempRow = row;
+        canTouchEvent = false;
+        gp.playSE(13);
     }
-    public void damagePit(int col, int row, int gameState){
+    public void damagePit(int gameState){
         
         gp.gameState = gameState;
         gp.playSE(6);
@@ -111,8 +125,14 @@ public class EventHandler {
             gp.player.energy = gp.player.maxEnergy;
             gp.aSetter.setMonster();    //respawns monsters
         }
+    }
+    public void speak(Entity entity){
         
-        
+        if(gp.keyH.enterPressed == true || gp.keyH.spacePressed){
+            gp.gameState = gp.dialogueState;
+            gp.player.attackCanceled = true;
+            entity.speak();
+        }
     }
     
 }
