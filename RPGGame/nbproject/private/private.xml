@@ -7,10 +7,12 @@
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/UI.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/Player.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/KeyHandler.java</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/AssetSetter.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/Entity.java</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/NPC_shopKeeper_seller.java</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/EventHandler.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/ai/Node.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/ai/PathFinder.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/NPC_shopKeeper.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/CollisionChecker.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/tile/TileManager.java</file>
         </group>
     </open-files>
 </project-private>

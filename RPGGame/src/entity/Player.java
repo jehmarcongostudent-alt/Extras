@@ -60,12 +60,12 @@ public class Player extends Entity{
     }
     public void setDefaultValues(){
         
-        //worldX = gp.tileSize * 6;  //starting position
-        //worldY = gp.tileSize * 2;  //starting postion
+        worldX = gp.tileSize * 6;  //starting position
+        worldY = gp.tileSize * 2;  //starting postion
         //for testing
-        worldX = gp.tileSize*26;
-        worldY = gp.tileSize*24;
-        gp.currentMap = 1;
+        //worldX = gp.tileSize*26;
+        //worldY = gp.tileSize*24;
+        //gp.currentMap = 1;
         
         speed = 4;
         direction = "down";

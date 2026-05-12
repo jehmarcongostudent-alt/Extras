@@ -1,4 +1,5 @@
 package rpggame;
+import ai.PathFinder;
 import entity.Entity;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -44,7 +45,7 @@ public class GamePanel extends JPanel implements Runnable{
     int FPS = 60;
     
     //SYSTEM
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
     public KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound();
     Sound se = new Sound();
@@ -53,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable{
     public UI ui = new UI(this);
     public EventHandler eHandler = new EventHandler(this);
     Config config = new Config(this);
+    public PathFinder pFinder = new PathFinder(this);
     Thread gameThread;
     
     //ENTITY AND OBJECT
