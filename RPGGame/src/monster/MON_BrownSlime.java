@@ -20,7 +20,8 @@ public class MON_BrownSlime extends Entity{
         
         type = type_monster;
         name = "Brown Slime";
-        speed = 1;
+        defaultSpeed = 1;
+        speed = defaultSpeed;
         maxLife = 6;
         life = maxLife;
         attack = 5;
@@ -80,8 +81,16 @@ public class MON_BrownSlime extends Entity{
             if(i > 197 && projectile.alive == false && shotAvailableCounter == 30){
 
                 projectile.set(worldX, worldY, direction, true, this);
-                gp.projectileList.add(projectile);
+ //               gp.projectileList.add(projectile);
                 shotAvailableCounter = 0;
+                
+                //CHECK VACANCY
+                for(int ii = 0; ii < gp.projectile[1].length; ii++){
+                    if(gp.projectile[gp.currentMap][ii] == null){
+                        gp.projectile[gp.currentMap][ii] = projectile;
+                        break;
+                    }
+                }
             }
         }
         else{

@@ -20,12 +20,13 @@ public class MON_shopKeeperTwin extends Entity{
         
         type = type_monster;
         name = "Drunk Man";
-        speed = 2;
-        maxLife = 6;
+        defaultSpeed = 2;
+        speed = defaultSpeed;
+        maxLife = 750;
         life = maxLife;
-        attack = 5;
-        defense = 0;
-        exp = 3;
+        attack = 10;
+        defense = 2;
+        exp = 500;
         projectile = new OBJ_Rock(gp);
         
         solidArea.x = 3;
@@ -61,8 +62,16 @@ public class MON_shopKeeperTwin extends Entity{
             if(i > 197 && projectile.alive == false && shotAvailableCounter == 30){
 
                 projectile.set(worldX, worldY, direction, true, this);
-                gp.projectileList.add(projectile);
+ //               gp.projectileList.add(projectile);
                 shotAvailableCounter = 0;
+                
+                //CHECK VACANCY
+                for(int ii = 0; ii < gp.projectile[1].length; ii++){
+                    if(gp.projectile[gp.currentMap][ii] == null){
+                        gp.projectile[gp.currentMap][ii] = projectile;
+                        break;
+                    }
+                }
             }
         }
         else{

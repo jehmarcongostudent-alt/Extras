@@ -20,10 +20,11 @@ public class OBJ_Boots extends Entity{
         
         //collision = true;
     }
-    public void use(Entity entity){
+    public boolean use(Entity entity){
         
         gp.playSE(1);
         gp.ui.addMessage("Speed +" + value);
         gp.player.speed += value;
+        return true;
     }
 }

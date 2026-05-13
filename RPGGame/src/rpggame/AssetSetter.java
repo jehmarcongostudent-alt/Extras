@@ -49,26 +49,23 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldY = gp.tileSize*2;
         i++;
         gp.obj[mapNum][i] = new OBJ_Shield_Blue(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*9;
+        gp.obj[mapNum][i].worldY = gp.tileSize*10;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Door(gp);
         gp.obj[mapNum][i].worldX = gp.tileSize*10;
         gp.obj[mapNum][i].worldY = gp.tileSize*10;
         i++;
-        gp.obj[mapNum][i] = new OBJ_Potion_Red(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*3;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp,new OBJ_Axe_BattleAxe(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*23;
         gp.obj[mapNum][i].worldY = gp.tileSize*11;
-        i++;
-        gp.obj[mapNum][i] = new OBJ_Potion_Red(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*6;
-        gp.obj[mapNum][i].worldY = gp.tileSize*21;
         
-        i++;
-        gp.obj[mapNum][i] = new OBJ_Heart(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*7;
-        gp.obj[mapNum][i].worldY = gp.tileSize*21;
         
-        i++;
-        gp.obj[mapNum][i] = new OBJ_Bow_Arrow(gp);
-        gp.obj[mapNum][i].worldX = gp.tileSize*8;
-        gp.obj[mapNum][i].worldY = gp.tileSize*21;
+        mapNum = 1;
+        i = 0;
+        gp.obj[mapNum][i] = new OBJ_Chest(gp,new OBJ_Axe_BattleAxe(gp));
+        gp.obj[mapNum][i].worldX = gp.tileSize*30;
+        gp.obj[mapNum][i].worldY = gp.tileSize*22;
         
     }
     public void setNPC(){

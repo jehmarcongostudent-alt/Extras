@@ -18,10 +18,11 @@ public class OBJ_Bow_Arrow extends Entity{
         image = setup("/objects/bow_arrow", gp.tileSize, gp.tileSize);
         image2 = setup("/objects/bow_empty", gp.tileSize, gp.tileSize);
     }
-    public void use(Entity entity){
+    public boolean use(Entity entity){
 
         gp.playSE(2);
         gp.ui.addMessage("Arrow +"+value);
         entity.energy += value;
+        return true;
     }
 }
