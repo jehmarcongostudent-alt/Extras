@@ -9,6 +9,7 @@ import tile.TileManager;
 
 import javax.swing.JPanel;
 import entity.Player;
+import environment.EnvironmentManager;
 import java.awt.Font;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -55,6 +56,7 @@ public class GamePanel extends JPanel implements Runnable{
     public EventHandler eHandler = new EventHandler(this);
     Config config = new Config(this);
     public PathFinder pFinder = new PathFinder(this);
+    EnvironmentManager eManager = new EnvironmentManager(this);
     Thread gameThread;
     
     //ENTITY AND OBJECT
@@ -94,8 +96,8 @@ public class GamePanel extends JPanel implements Runnable{
         aSetter.setNPC();
         aSetter.setMonster();
         aSetter.setInteractiveTile();
-//        playMusic(0);
-//        stopMusic();
+        eManager.setup();
+        
         gameState = titleState;
         
         tempScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
@@ -300,6 +302,9 @@ public class GamePanel extends JPanel implements Runnable{
             for(int i = 0; i < entityList.size(); i++){
                 entityList.clear();
             }
+            
+            //ENVIRONMENT
+            eManager.draw(g2);
 
             //UI
             ui.draw(g2);

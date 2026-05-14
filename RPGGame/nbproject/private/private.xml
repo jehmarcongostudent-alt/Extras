@@ -15,6 +15,12 @@
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/tile/TileManager.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/monster/MON_shopKeeperTwin.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/monster/MON_BrownSlime.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/object/OBJ_Potion_Red.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/object/OBJ_Key.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/object/OBJ_Chest.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/AssetSetter.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/environment/EnvironmentManager.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/environment/Lighting.java</file>
         </group>
     </open-files>
 </project-private>
