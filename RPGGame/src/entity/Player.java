@@ -17,6 +17,7 @@ import object.OBJ_Axe_Rusty;
 import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
 import object.OBJ_Sword_Normal;
+import object.OBJ_Torch;
 import rpggame.UtilityTool;
 
 public class Player extends Entity{
@@ -27,6 +28,7 @@ public class Player extends Entity{
     public final int screenY;
     int standCounter = 0;
     public boolean attackCanceled = false;
+    public boolean lightUpdated = false;
     
     //player
     public String playerClass = "archer";   //setDefault class as archer
@@ -84,6 +86,7 @@ public class Player extends Entity{
         currentWeapon = new OBJ_Sword_Normal(gp);
         //currentWeapon = new OBJ_Axe(gp);
         currentShield = new OBJ_Shield_Wood(gp);
+        currentLight = new OBJ_Torch(gp);
         projectile = new OBJ_Arrow(gp);
         attack = getAttack();   //total attack is from strenth and weapon
         defense = getDefense(); //total shield is from dex and shield
@@ -105,6 +108,7 @@ public class Player extends Entity{
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
+        inventory.add(currentLight);
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Axe_Rusty(gp));
     }
@@ -114,6 +118,9 @@ public class Player extends Entity{
     }
     public int getDefense(){
         return defense = dexterity * currentShield.defenseValue;
+    }
+    public int getSpeed(){
+        return speed = speed + currentBoots.speedValue;
     }
     //PLAYER CLASSES
     public void playerClasses(){
@@ -150,6 +157,20 @@ public class Player extends Entity{
         right0 = setup("/player/"+avatar+"/"+avatar+"_right0", gp.tileSize, gp.tileSize);
         right1 = setup("/player/"+avatar+"/"+avatar+"_right1", gp.tileSize, gp.tileSize);
         right2 = setup("/player/"+avatar+"/"+avatar+"_right2", gp.tileSize, gp.tileSize);
+    }
+    public void getSleepingImage(BufferedImage image){
+        up0 = image;
+        up1 = image;
+        up2 = image;
+        down0 = image;
+        down1 = image;
+        down2 = image;
+        left0 = image;
+        left1 = image;
+        left2 = image;
+        right0 = image;
+        right1 = image;
+        right2 = image;
     }
     public void getPlayerAttackImage(){
         
@@ -514,6 +535,21 @@ public class Player extends Entity{
                 
                 currentShield = selectedItem;
                 defense = getDefense();
+            }
+            if(selectedItem.type == type_boots){
+                
+                currentBoots = selectedItem;
+                speed = getSpeed();
+            }
+            if(selectedItem.type == type_light){
+                
+                if(currentLight == selectedItem){
+                    currentLight = null;
+                }
+                else{
+                    currentLight = selectedItem;
+                }
+                lightUpdated = true;
             }
             if(selectedItem.type == type_consumable){
                 

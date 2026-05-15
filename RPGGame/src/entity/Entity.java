@@ -65,6 +65,8 @@ public class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public Entity currentBoots;
+    public Entity currentLight;
     public Projectile projectile;
     
     //ITEM ATTRIBUTES
@@ -73,12 +75,14 @@ public class Entity {
     public int value;
     public int attackValue;
     public int defenseValue;
+    public int speedValue;
     public String description = "";
     public int useCost;
     public int price;
     public int knockBackPower = 0;
     public boolean stackable = false;
     public int amount = 1;
+    public int lightRadius;
     
     //TYPE
     public int type;    //0=player, 1 = npc, 2 = monster
@@ -91,6 +95,8 @@ public class Entity {
     public final int type_consumable = 6;
     public final int type_pickupOnly = 7;
     public final int type_obstacle = 8;
+    public final int type_light = 9;
+    public final int type_boots = 20;
     
     public Entity(GamePanel gp){
         this.gp = gp;

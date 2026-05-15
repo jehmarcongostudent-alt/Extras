@@ -82,6 +82,19 @@ public class AssetSetter {
         gp.obj[mapNum][i] = new OBJ_Chest(gp,new OBJ_Axe_BattleAxe(gp));
         gp.obj[mapNum][i].worldX = gp.tileSize*30;
         gp.obj[mapNum][i].worldY = gp.tileSize*22;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Lantern(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*29;
+        gp.obj[mapNum][i].worldY = gp.tileSize*22;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_BootE(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*29;
+        gp.obj[mapNum][i].worldY = gp.tileSize*22;
+        i++;
+        gp.obj[mapNum][i] = new OBJ_Tent(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*29;
+        gp.obj[mapNum][i].worldY = gp.tileSize*22;
+        i++;
         
     }
     public void setNPC(){
