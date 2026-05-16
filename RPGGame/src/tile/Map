@@ -1,0 +1,7 @@
+package tile;
+
+public class Map extends TileManager{
+
+  GamePanel gp;
+Buffered IMage
+}
