@@ -16,7 +16,8 @@ public class Entity {
     
     GamePanel gp;
     public BufferedImage up0, up1, up2, down0, down1, down2, left0, left1, left2, right0, right1, right2;  //describes image with an accessible buffer of image data (used to store image files)
-    public BufferedImage attackUp0, attackUp1, attackDown0, attackDown1, attackLeft0, attackLeft1, attackRight0, attackRight1;
+    public BufferedImage attackUp0, attackUp1, attackDown0, attackDown1, attackLeft0, attackLeft1, attackRight0, attackRight1, 
+            guardUp, guardDown, guardLeft, guardRight;
     public BufferedImage image, image2, image3;
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
@@ -39,6 +40,9 @@ public class Entity {
     public boolean onPath = false;
     public boolean knockBack = false;
     public String knockBackDirection;
+    public boolean guarding = false;
+    public boolean transparent = false;
+    public boolean offBalance = false;
     
     //COUNTER
     public int spriteCounter = 0;   //lets it do moving animation
@@ -48,6 +52,8 @@ public class Entity {
     int dyingCounter = 0;
     int hpBarCounter = 0;
     int knockBackCounter = 0;
+    public int guardCounter = 0;
+    int offBalanceCounter = 0;
     
     //CHARACTER ATTRIBUTES
     public String name;
@@ -285,11 +291,9 @@ public class Entity {
                     spriteNum = 1;
                 }
                 spriteCounter = 0;
+            }
         }
-        }
-        
 
-        
         if(invincible == true){
             invincibleCounter++;
             if(invincibleCounter > 40){
@@ -299,6 +303,13 @@ public class Entity {
         }
         if(shotAvailableCounter < 30){
             shotAvailableCounter++;
+        }
+        if(offBalance == true){
+            offBalanceCounter++;
+            if(offBalanceCounter > 60){
+                offBalance = false;
+                offBalanceCounter = 0;
+            }
         }
     }
     public void checkAttackOrNot(int rate, int straight, int horizontal){
@@ -394,6 +405,18 @@ public class Entity {
                 actionLockCounter = 0;
             }
     }
+    public String getOppositeDirection(String direction){
+        
+        String oppositeDirection = "";
+        
+        switch(direction){
+            case "up": oppositeDirection = "down";
+            case "down": oppositeDirection = "up";
+            case "left": oppositeDirection = "right";
+            case "right": oppositeDirection = "left";
+        }
+        return oppositeDirection;
+    }
     public void attacking(){
         
         spriteCounter++;
@@ -456,13 +479,42 @@ public class Entity {
     public void damagePlayer(int attack){
         
         if(gp.player.invincible == false){
-                //we give damage
-                gp.playSE(6);
-                
+            
                 int damage = attack - gp.player.defense;
-                if(damage < 0){
-                    damage = 0;
+                
+                //Get an opposite direction of attacker
+                String canGuardDirection = getOppositeDirection(direction);
+                
+                if(gp.player.guarding == true && gp.player.direction.equals(canGuardDirection)){
+                    
+                    //Parry
+                    if(gp.player.guardCounter < 20){
+                        damage = 0;
+                        gp.playSE(16);
+                        setKnockBack(this, gp.player, knockBackPower);
+                        offBalance = true;
+                        spriteCounter =- 60;
+                    }
+                    //Normal guard
+                    else{
+                    damage /= 3;
+                    gp.playSE(15);
+                        
+                    }
                 }
+                else{
+                    //Not guarding
+                    gp.playSE(6);
+                    if(damage < 0){
+                        damage = 0;
+                    }
+                }
+                
+                if(damage != 0){
+                    gp.player.transparent = true;
+                    setKnockBack(gp.player, this, knockBackPower);
+                }
+
                 gp.player.life -= damage;
                 gp.player.invincible = true;
             }

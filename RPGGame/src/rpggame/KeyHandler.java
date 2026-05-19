@@ -7,7 +7,7 @@ public class KeyHandler implements KeyListener{
     
     GamePanel gp;
     
-    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, enterPressed, shotKeyPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, enterPressed, shotKeyPressed, blockKeyPressed;
     //DEBUG
     boolean showDebugText = false;
     
@@ -118,7 +118,7 @@ public class KeyHandler implements KeyListener{
 
                     gp.player.playerClass = "warrior";
                     gp.player.playerClasses();  //reruns this
-                    gp.player.getPlayerImage(); //reloads player image
+                    gp.player.getImage(); //reloads player image
 
                     gp.gameState = gp.playState;
                     gp.playMusic(0);
@@ -128,7 +128,7 @@ public class KeyHandler implements KeyListener{
 
                     gp.player.playerClass = "mage";
                     gp.player.playerClasses();  //reruns this
-                    gp.player.getPlayerImage(); //reloads player image
+                    gp.player.getImage(); //reloads player image
 
                     gp.gameState = gp.playState;
                     gp.playMusic(0);
@@ -138,7 +138,7 @@ public class KeyHandler implements KeyListener{
 
                     gp.player.playerClass = "tank";
                     gp.player.playerClasses();  //reruns this
-                    gp.player.getPlayerImage(); //reloads player image
+                    gp.player.getImage(); //reloads player image
 
                     gp.gameState = gp.playState;
                     gp.playMusic(0);
@@ -192,6 +192,9 @@ public class KeyHandler implements KeyListener{
             else{
                 gp.map.miniMapOn = false;
             }
+        }
+        if(code == KeyEvent.VK_Q){
+            blockKeyPressed = true;
         }
 
         //DEBUG
@@ -439,6 +442,15 @@ public class KeyHandler implements KeyListener{
         }
         if(code == KeyEvent.VK_F){
             shotKeyPressed = false;
+        }
+        if(code == KeyEvent.VK_Q){
+            blockKeyPressed = false;
+        }
+        if(code == KeyEvent.VK_ENTER){
+            enterPressed = false;
+        }
+        if(code == KeyEvent.VK_SPACE){
+            spacePressed = false;
         }
     }
 }
