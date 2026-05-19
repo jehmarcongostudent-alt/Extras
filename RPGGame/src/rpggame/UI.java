@@ -22,7 +22,7 @@ public class UI {
     
     GamePanel gp;
     Graphics2D g2;
-    Font maruMonica, purisaB;
+    public Font maruMonica, purisaB;
     BufferedImage heart_full, heart_half, heart_empty, bow_arrow, bow_empty, coin;
     public boolean messageOn = false;
     ArrayList<String> message = new ArrayList<>();

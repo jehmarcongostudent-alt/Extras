@@ -18,5 +18,7 @@ public class OBJ_Axe_Rusty extends Entity{
         attackArea.height = 20;
         description = "[" + name + "]\ncuts but painful to use";
         price = 5;
+        motion1_duration = 6;
+        motion2_duration = 25;
     }
 }

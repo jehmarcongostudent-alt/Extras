@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package rpggame;
 
 import entity.NPC_shopKeeper;
 import entity.NPC_shopKeeper_seller;
 import monster.MON_BrownSlime;
 import monster.MON_GreenSlime;
+import monster.MON_Orc;
+import monster.MON_Orc2;
 import monster.MON_shopKeeperTwin;
 import object.*;
 import tile_interactive.IT_DryTree;
@@ -161,6 +159,10 @@ public class AssetSetter {
         gp.monster[mapNum][i] = new MON_shopKeeperTwin(gp);
         gp.monster[mapNum][i].worldX =gp.tileSize*37;
         gp.monster[mapNum][i].worldY =gp.tileSize*43;
+        i++;
+        gp.monster[mapNum][i] = new MON_Orc2(gp);
+        gp.monster[mapNum][i].worldX =gp.tileSize*6;
+        gp.monster[mapNum][i].worldY =gp.tileSize*44;
         
     }
     public void setInteractiveTile(){

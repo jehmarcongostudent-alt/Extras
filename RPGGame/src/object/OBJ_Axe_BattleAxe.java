@@ -19,5 +19,7 @@ public class OBJ_Axe_BattleAxe extends Entity{
         description = "[" + name + "]\nused in countless battles.";
         price = 1500;
         knockBackPower = 15;
+        motion1_duration = 19;
+        motion2_duration = 39;
     }
 }
