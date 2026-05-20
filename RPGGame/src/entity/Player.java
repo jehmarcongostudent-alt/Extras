@@ -51,24 +51,16 @@ public class Player extends Entity{
         solidArea.width = 28;
         solidArea.height = 16;
         
-        //attackArea.width = 36;
-        //attackArea.height = 36;
-        
         setDefaultValues();
-        playerClasses();
-        getImage();
-        getAttackImage();
-        getGuardImage();
-        setItems();
     }
     public void setDefaultValues(){
         
-//        worldX = gp.tileSize * 6;  //starting position
-//        worldY = gp.tileSize * 2;  //starting postion
+        worldX = gp.tileSize * 6;  //starting position
+        worldY = gp.tileSize * 2;  //starting postion
 //        //for testing
-        worldX = gp.tileSize*26;
-        worldY = gp.tileSize*24;
-        gp.currentMap = 1;
+//        worldX = gp.tileSize*26;
+//        worldY = gp.tileSize*24;
+//        gp.currentMap = 1;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -91,6 +83,12 @@ public class Player extends Entity{
         projectile = new OBJ_Arrow(gp);
         attack = getAttack();   //total attack is from strenth and weapon
         defense = getDefense(); //total shield is from dex and shield
+
+        playerClasses();
+        getImage();
+        getAttackImage();
+        getGuardImage();
+        setItems();
     }
     public void setDefaultPositions(){
         
@@ -98,19 +96,25 @@ public class Player extends Entity{
         worldY = gp.tileSize * 2;
         direction = "down";
     }
-    public void restoreLifeAndEnergy(){
+    public void restoreStatus(){
         
         life = maxLife;
         energy = maxEnergy;
         invincible = false;
         transparent = false;
+        attacking = false;
+        guarding = false;
+        knockBack = false;
+        lightUpdated = true;
     }
     public void setItems(){
         
         inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
-        inventory.add(currentLight);
+        if(currentLight != null){
+            inventory.add(currentLight);
+        }
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Axe_Rusty(gp));
     }
@@ -122,6 +126,24 @@ public class Player extends Entity{
     }
     public int getDefense(){
         return defense = dexterity * currentShield.defenseValue;
+    }
+    public int getCurrentWeaponSlot(){
+        int currentWeaponSlot = 0;
+        for(int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i) == currentWeapon){
+                currentWeaponSlot = i;
+            }
+        }
+        return currentWeaponSlot;
+    }
+    public int getCurrentShieldSlot(){
+        int getCurrentShieldSlot = 0;
+        for(int i = 0; i < inventory.size(); i++){
+            if(inventory.get(i) == currentShield){
+                getCurrentShieldSlot = i;
+            }
+        }
+        return getCurrentShieldSlot;
     }
     public int getSpeed(){
         return speed = speed + currentBoots.speedValue;

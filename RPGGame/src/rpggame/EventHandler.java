@@ -120,10 +120,12 @@ public class EventHandler {
             gp.gameState = gameState;
             gp.player.attackCanceled = true;
             gp.playSE(2);
-            gp.ui.currentDialogue = "You drink the purified water\nYou're life has been recovered";
+            gp.ui.currentDialogue = "You drink the purified water\nYou're life has been recovered"
+                    + "\n(The progess has been saved)";
             gp.player.life = gp.player.maxLife;
             gp.player.energy = gp.player.maxEnergy;
             gp.aSetter.setMonster();    //respawns monsters
+            gp.saveload.save();
         }
     }
     public void speak(Entity entity){

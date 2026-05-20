@@ -22,4 +22,10 @@ public class OBJ_Axe_BattleAxe extends Entity{
         motion1_duration = 19;
         motion2_duration = 39;
     }
+    
+    public String getName(){
+        this.name = name;
+        
+        return name;
+    }
 }

@@ -3,8 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/Downloads/delete%20later/Extras-main2/Extras-main/RPGGame/src/rpggame/KeyHandler.java</file>
-            <file>file:/C:/Users/Admin/Downloads/delete%20later/Extras-main2/Extras-main/RPGGame/src/tile/Map.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/Entity.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/Player.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/UI.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/KeyHandler.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/Sound.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/Projectile.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/monster/MON_Orc.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/GamePanel.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/environment/Lighting.java</file>
         </group>
     </open-files>
 </project-private>

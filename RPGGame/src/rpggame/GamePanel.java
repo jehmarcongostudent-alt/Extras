@@ -1,5 +1,6 @@
 package rpggame;
 import ai.PathFinder;
+import data.SaveLoad;
 import entity.Entity;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -59,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable{
     public PathFinder pFinder = new PathFinder(this);
     EnvironmentManager eManager = new EnvironmentManager(this);
     Map map = new Map(this);
+    SaveLoad saveload = new SaveLoad(this);
     Thread gameThread;
     
     //ENTITY AND OBJECT
@@ -111,22 +113,19 @@ public class GamePanel extends JPanel implements Runnable{
             setFullScreen();
         }
     }
-    public void retry(){
+    public void resetGame(boolean restart){
         
         player.setDefaultPositions();
-        player.restoreLifeAndEnergy();
-        aSetter.setMonster();
-    }
-    public void restart(){
-        
-        player.setDefaultValues();
-        player.setDefaultPositions();
-        player.restoreLifeAndEnergy();
-        player.setItems();
-        aSetter.setObject();
+        player.restoreStatus();
         aSetter.setNPC();
         aSetter.setMonster();
-        aSetter.setInteractiveTile();
+        eManager.lighting.resetDay();
+        
+        if(restart == true){
+            player.setDefaultValues();
+            aSetter.setObject();
+            aSetter.setInteractiveTile();
+        }
     }
     public void setFullScreen(){
         

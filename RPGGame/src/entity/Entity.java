@@ -43,6 +43,8 @@ public class Entity {
     public boolean guarding = false;
     public boolean transparent = false;
     public boolean offBalance = false;
+    public Entity loot;
+    public boolean opened = false;
     
     //COUNTER
     public int spriteCounter = 0;   //lets it do moving animation
@@ -150,6 +152,7 @@ public class Entity {
         int goalRow = (gp.player.worldY + gp.player.solidArea.y)/gp.tileSize;
         return goalRow;
     }
+    public void setLoot(Entity loot){}
     public void setAction(){}   //works as the characters AI where you decide their actions.
     public void damageReaction(){}
     public void speak(){
@@ -744,10 +747,10 @@ public class Entity {
         int nextWorldY = user.getTopY();
         
         switch(user.direction){
-            case "up": nextWorldY = user.getTopY()-user.speed; break;    // change 1 to user.speed
-            case "down": nextWorldY = user.getBottomY()+user.speed; break;    // change 1 to user.speed
-            case "left": nextWorldX = user.getLeftX()-user.speed; break;    // change 1 to user.speed
-            case "right": nextWorldX = user.getRightX()+user.speed; break;    // change 1 to user.speed
+            case "up": nextWorldY = user.getTopY()-gp.player.speed; break;    // change 1 to user.speed
+            case "down": nextWorldY = user.getBottomY()+gp.player.speed; break;    // change 1 to user.speed
+            case "left": nextWorldX = user.getLeftX()-gp.player.speed; break;    // change 1 to user.speed
+            case "right": nextWorldX = user.getRightX()+gp.player.speed; break;    // change 1 to user.speed
         }
         int col = nextWorldX/gp.tileSize;
         int row = nextWorldY/gp.tileSize;
