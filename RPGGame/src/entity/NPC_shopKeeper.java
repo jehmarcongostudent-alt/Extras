@@ -18,6 +18,8 @@ public class NPC_shopKeeper extends Entity{
     solidArea = new Rectangle(8, 16, 32, 32);
     solidAreaDefaultX = solidArea.x;
     solidAreaDefaultY = solidArea.y;
+    
+    dialogueSet = -1;
         
         getImage();
         setDialogue();
@@ -39,10 +41,15 @@ public class NPC_shopKeeper extends Entity{
     }
     public void setDialogue(){
         
-        dialogues[0] = "Buy 1 for the price of 2 and get \nanother one ABSOLUTELY FREE!!!";
-        dialogues[1] = "I never really liked Cedric";
-        dialogues[2] = "But his brother is the best!!";
+        dialogues[0][0] = "Buy 1 for the price of 2 and get \nanother one ABSOLUTELY FREE!!!";
+        dialogues[0][1] = "I never really liked Cedric";
+        dialogues[0][2] = "But his brother is the best!!";
         
+        dialogues[1][0] = "If you're ever tired, drink the spring water up north west.";
+        dialogues[1][1] = "It attracts monsters though.";
+        dialogues[1][2] = "In any case, I better noy see you dying.";
+        
+        dialogues[2][0] = "Why do all door get opened by the same keys?";
     }
     public void setAction(){
         
@@ -86,8 +93,16 @@ public class NPC_shopKeeper extends Entity{
         
         //Do this character specific stuff
         
-        super.speak();
+        facePlayer();
+        startDialogue(this,dialogueSet);
         
-        onPath = true;
+        dialogueSet++;
+        
+        if(dialogues[dialogueSet][0] == null){
+
+            dialogueSet--;
+        }
+        
+//        onPath = true;
     }
 }

@@ -9,9 +9,16 @@
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/KeyHandler.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/Sound.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/Projectile.java</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/monster/MON_Orc.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/GamePanel.java</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/environment/Lighting.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/data/DataStorage.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/data/SaveLoad.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/EventHandler.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/object/OBJ_Torch.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/object/OBJ_Axe_BattleAxe.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/AssetSetter.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/object/OBJ_Chest.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/NPC_shopKeeper.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/NPC_shopKeeper_seller.java</file>
         </group>
     </open-files>
 </project-private>

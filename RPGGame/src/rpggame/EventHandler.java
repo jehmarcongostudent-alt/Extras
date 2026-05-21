@@ -6,6 +6,7 @@ public class EventHandler {
     
     GamePanel gp;
     EventRect eventRect[][][];
+    Entity eventMaster;
     
     int previousEventX, previousEventY;
     boolean canTouchEvent = true;
@@ -13,6 +14,8 @@ public class EventHandler {
     
     public EventHandler(GamePanel gp){
         this.gp = gp;
+        
+        eventMaster = new Entity(gp);
         
         eventRect = new EventRect[gp.maxMap][gp.maxWorldCol][gp.maxWorldRow];
         
@@ -41,9 +44,16 @@ public class EventHandler {
             }
         }
         
-        
+        setDialogue();
     }
-    
+    public void setDialogue(){
+        
+        eventMaster.dialogues[0][0] = "You tripped and fell";
+        
+        eventMaster.dialogues[1][0] = "You drink the purified water\nYou're life has been recovered"
+                    + "\n(The progess has been saved)";
+        eventMaster.dialogues[1][1] = "Damn,this so good water";
+    }
     public void checkEvent(){
         
         //check if the player character is more than 1 tile away from the last event
@@ -110,7 +120,7 @@ public class EventHandler {
         
         gp.gameState = gameState;
         gp.playSE(6);
-        gp.ui.currentDialogue = "You tripped and fell";
+        eventMaster.startDialogue(eventMaster, 0);
         gp.player.life -= 1;
         canTouchEvent = false;
     }
@@ -120,8 +130,7 @@ public class EventHandler {
             gp.gameState = gameState;
             gp.player.attackCanceled = true;
             gp.playSE(2);
-            gp.ui.currentDialogue = "You drink the purified water\nYou're life has been recovered"
-                    + "\n(The progess has been saved)";
+            eventMaster.startDialogue(eventMaster, 1);
             gp.player.life = gp.player.maxLife;
             gp.player.energy = gp.player.maxEnergy;
             gp.aSetter.setMonster();    //respawns monsters

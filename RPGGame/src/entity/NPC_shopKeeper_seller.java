@@ -39,7 +39,11 @@ public class NPC_shopKeeper_seller extends Entity{
     }
     public void setDialogue(){
         
-        dialogues[0] = "Welcome traveler\nBrave of you to enter my shop";
+        dialogues[0][0] = "Welcome traveler\nBrave of you to enter my shop";
+        dialogues[1][0] = "Blessed be you journey";
+        dialogues[2][0] = "You need more coins to but that!";
+        dialogues[3][0] = "Storage is full!";
+        dialogues[4][0] = "You cannot sell an equipped item!";
     }
     public void setItem(){
         
@@ -51,7 +55,7 @@ public class NPC_shopKeeper_seller extends Entity{
     }
     public void speak(){
         
-        super.speak();
+        facePlayer();
         gp.gameState = gp.tradeState;
         gp.ui.npc = this;
     }
