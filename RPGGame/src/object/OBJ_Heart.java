@@ -6,6 +6,8 @@ import rpggame.GamePanel;
 
 public class OBJ_Heart extends Entity{
     
+    public static final String objName = "Heart";
+    
 GamePanel gp;
     
     public OBJ_Heart(GamePanel gp){
@@ -13,7 +15,7 @@ GamePanel gp;
         this.gp = gp;
         
         type = type_pickupOnly;
-        name = "Heart";
+        name = objName;
         down1 = setup("/objects/heart_full", gp.tileSize, gp.tileSize);
         value = 1;
         image = setup("/objects/heart_full", gp.tileSize, gp.tileSize);

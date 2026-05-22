@@ -7,13 +7,15 @@ import rpggame.GamePanel;
 
 public class OBJ_Arrow extends Projectile{
     
+    public static final String objName = "Arrow";
+    
     GamePanel gp;
     
     public OBJ_Arrow(GamePanel gp){
         super(gp);
         this.gp = gp;
         
-        name = "Arrow";
+        name = objName;
         speed = 15;
         maxLife = 80;
         life = maxLife;

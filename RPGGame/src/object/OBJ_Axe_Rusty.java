@@ -6,12 +6,13 @@ import rpggame.GamePanel;
 
 public class OBJ_Axe_Rusty extends Entity{
     
+    public static final String objName = "old used up Axe";
     
     public OBJ_Axe_Rusty(GamePanel gp){
         super(gp);
         
         type = type_axe;
-        name = "old used up Axe";
+        name = objName;
         down1 = setup("/objects/rustyaxe", gp.tileSize, gp.tileSize);
         attackValue = 1;
         attackArea.width = 20;

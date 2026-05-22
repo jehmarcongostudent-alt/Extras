@@ -6,12 +6,13 @@ import rpggame.GamePanel;
 
 public class OBJ_Axe_BattleAxe extends Entity{
     
+    public static final String objName = "Gladiator's Axe";
     
     public OBJ_Axe_BattleAxe(GamePanel gp){
         super(gp);
         
         type = type_axe;
-        name = "Gladiator's Axe";
+        name = objName;
         down1 = setup("/objects/axe_battleAxe", gp.tileSize, gp.tileSize);
         attackValue = 5;
         attackArea.width = 30;

@@ -5,6 +5,8 @@ import rpggame.GamePanel;
 
 public class OBJ_BootE extends Entity{
     
+    public static final String objName = "Boots";
+    
     GamePanel gp;
     
     public OBJ_BootE(GamePanel gp){
@@ -12,7 +14,7 @@ public class OBJ_BootE extends Entity{
         this.gp = gp;
         
         type = type_boots;
-        name = "Boots";
+        name = objName;
         speedValue = 3;
         down1 = setup("/objects/shoes1", gp.tileSize, gp.tileSize);
         description = "[Old Boots]\ncurrently in\ntesting phase.";

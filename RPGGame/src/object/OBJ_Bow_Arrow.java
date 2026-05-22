@@ -4,6 +4,8 @@ import entity.Entity;
 import rpggame.GamePanel;
 
 public class OBJ_Bow_Arrow extends Entity{
+    
+    public static final String objName = "Bow and Arrow";
 
     GamePanel gp;
 
@@ -12,7 +14,7 @@ public class OBJ_Bow_Arrow extends Entity{
         this.gp = gp;
 
         type = type_pickupOnly;
-        name = "Bow and Arrow";
+        name = objName;
         value =1;
         down1 = setup("/objects/bow_arrow", gp.tileSize, gp.tileSize);
         image = setup("/objects/bow_arrow", gp.tileSize, gp.tileSize);

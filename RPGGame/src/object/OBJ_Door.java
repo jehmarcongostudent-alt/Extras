@@ -5,6 +5,8 @@ import rpggame.GamePanel;
 
 public class OBJ_Door extends Entity{
     
+    public static final String objName = "Door";
+    
     GamePanel gp;
     
     public OBJ_Door(GamePanel gp){
@@ -12,7 +14,7 @@ public class OBJ_Door extends Entity{
         this.gp = gp;
         
         type = type_obstacle;
-        name = "Door";
+        name = objName;
         down1 = setup("/objects/door", gp.tileSize, gp.tileSize);
         
         collision = true;
