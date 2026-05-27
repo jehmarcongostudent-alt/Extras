@@ -65,15 +65,18 @@ public class EventHandler {
         }
         
         if(canTouchEvent == true){
-            
             //ALL EVENTS HERE
             if(hit(0,37,43,"right") == true){damagePit(gp.dialogueState); }   //x, y, facing posittion
             else if(hit(0,13,2,"right") == true){damagePit(gp.dialogueState); }
             else if(hit(0,1,15,"any") == true){damagePit(gp.dialogueState); }
             else if(hit(0,13,3,"any") == true){healingPool(gp.dialogueState); }
-            else if(hit(0,21,24,"any") == true){teleport(1,26,27); }
-            else if(hit(1,26,27,"any") == true){teleport(0,21,24); }
+            else if(hit(0,21,24,"any") == true){teleport(1,26,27,gp.indoor); }    //to shop
+            else if(hit(1,26,27,"any") == true){teleport(0,21,24,gp.outside); }    // to outside
             else if(hit(1,26,24,"up") == true){speak(gp.npc[1][0]);}
+            else if(hit(0,31,47,"any") == true){teleport(2,22,3,gp.cave); }     //to cave
+            else if(hit(2,22,3,"any") == true){teleport(0,31,47,gp.outside); }     // to outside
+            else if(hit(2,28,48,"any") == true){teleport(3,22,3,gp.cave); }     //to cave2
+            else if(hit(3,22,3,"any") == true){teleport(2,28,48,gp.cave); }     // to back cave1
             
         }
         
@@ -108,8 +111,10 @@ public class EventHandler {
         return hit;
         
     }
-    public void teleport(int map, int col, int row){
+    public void teleport(int map, int col, int row, int area){
+        
         gp.gameState = gp.transitionState;
+        gp.nextArea = area;
         tempMap = map;
         tempCol = col;
         tempRow = row;
