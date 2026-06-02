@@ -67,7 +67,7 @@ public class MON_BrownSlime extends Entity{
             checkStartChasingOrNot(gp.player, 5 ,100);
             
             //Get a random direction
-            getRandomDirection();
+            getRandomDirection(120);
         }
     }
     public void damageReaction(){

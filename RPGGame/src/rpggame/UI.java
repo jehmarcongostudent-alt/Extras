@@ -132,12 +132,20 @@ public class UI {
         int x = gp.tileSize/2;
         int y = gp.tileSize/2;
         int i = 0;
+        int iconSize = 32;
+        int manaStartY = 0;
         
         //DRAW MAX LIFE
         while(i < gp.player.maxLife/2){
-            g2.drawImage(heart_empty, x, y, null);
+            g2.drawImage(heart_empty, x, y, iconSize, iconSize, null);
             i++;
-            x += gp.tileSize;
+            x += iconSize;
+            manaStartY = y+32;
+            
+            if(i % 8 == 0){
+                x = gp.tileSize/2;
+                y += iconSize;
+            }
         }
         
         //RESET
@@ -147,13 +155,18 @@ public class UI {
         
         //DRAW CURRENT LIFE
         while(i < gp.player.life){
-            g2.drawImage(heart_half, x, y, null);
+            g2.drawImage(heart_half, x, y, iconSize, iconSize, null);
             i++;
             if(i < gp.player.life){
-                g2.drawImage(heart_full, x, y, null);
+                g2.drawImage(heart_full, x, y, iconSize, iconSize, null);
             }
             i++;
-            x += gp.tileSize;
+            x += iconSize;
+            
+            if(i % 16 == 0){
+                x = gp.tileSize/2;
+                y += iconSize;
+            }
         }
         
         //DRAW MAX ENERGY
@@ -161,9 +174,9 @@ public class UI {
         y = (int)(gp.tileSize*1.5);
         i = 0;
         while(i < gp.player.maxEnergy){
-            g2.drawImage(bow_empty, x, y, null); 
+            g2.drawImage(bow_empty, x, y, iconSize, iconSize, null); 
             i++;
-            x += 41;
+            x += iconSize;
         }
         
         //DRAW ENERGY
@@ -171,9 +184,9 @@ public class UI {
         y = (int)(gp.tileSize*1.5);
         i = 0;
         while(i < gp.player.energy){
-            g2.drawImage(bow_arrow, x, y, null);
+            g2.drawImage(bow_arrow, x, y, iconSize, iconSize, null);
             i++;
-            x += 41;
+            x += iconSize;
         }
     }
     public void drawMessage(){
@@ -337,7 +350,7 @@ public class UI {
             
             if(charIndex < characters.length){
                 
-                gp.playSE(17);
+//                gp.playSE(17);
                 String s = String.valueOf(characters[charIndex]);
                 combinedText = combinedText + s;
                 currentDialogue = combinedText;

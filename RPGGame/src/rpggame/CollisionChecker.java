@@ -67,6 +67,12 @@ public class CollisionChecker {
         
         int index = 999;
         
+        //Use a temporal direction when it's being knocked back 
+        String direction = entity.direction;
+        if(entity.knockBack == true){
+            direction = entity.knockBackDirection;
+        }
+        
         for(int i = 0; i < gp.obj[1].length; i++){
             
             if(gp.obj[gp.currentMap][i] != null){
@@ -78,19 +84,11 @@ public class CollisionChecker {
                 gp.obj[gp.currentMap][i].solidArea.x = gp.obj[gp.currentMap][i].worldX + gp.obj[gp.currentMap][i].solidArea.x;
                 gp.obj[gp.currentMap][i].solidArea.y = gp.obj[gp.currentMap][i].worldY + gp.obj[gp.currentMap][i].solidArea.y;
                 
-                switch(entity.direction){
-                    case "up":
-                        entity.solidArea.y -= entity.speed;
-                        break;
-                    case "down":
-                        entity.solidArea.y += entity.speed;
-                        break;
-                    case "left":
-                        entity.solidArea.x -= entity.speed;
-                        break;
-                    case "right":
-                        entity.solidArea.x += entity.speed;
-                        break;
+                switch(direction){
+                    case "up":entity.solidArea.y -= entity.speed;break;
+                    case "down": entity.solidArea.y += entity.speed;break;
+                    case "left": entity.solidArea.x -= entity.speed;  break;
+                    case "right":  entity.solidArea.x += entity.speed; break;
                 }
                 if(entity.solidArea.intersects(gp.obj[gp.currentMap][i].solidArea)){   //intersects is used to check if 2 reactangles are coliding
                     if(gp.obj[gp.currentMap][i].collision == true){

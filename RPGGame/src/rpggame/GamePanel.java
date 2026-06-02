@@ -124,6 +124,7 @@ public class GamePanel extends JPanel implements Runnable{
     }
     public void resetGame(boolean restart){
         
+        currentArea = outside;
         player.setDefaultPositions();
         player.restoreStatus();
         player.resetCounter();
@@ -346,8 +347,9 @@ public class GamePanel extends JPanel implements Runnable{
             g2.drawString("WorldY" + player.worldY, x, y); y += lineHeight;
             g2.drawString("Col" + (player.worldX + player.solidArea.x)/tileSize, x, y); y += lineHeight;
             g2.drawString("Row" + (player.worldY + player.solidArea.y)/tileSize, x, y); y += lineHeight;
-            g2.drawString("Draw Time: " + passed, x, y);    //(iterator, TOP_ALIGNMENT, TOP_ALIGNMENT);
+            g2.drawString("Draw Time: " + passed, x, y);  y += lineHeight;   //(iterator, TOP_ALIGNMENT, TOP_ALIGNMENT);
             System.out.println("Draw Time: " + passed);
+            g2.drawString("god Mode: " + keyH.godModeOn, x, y);
         }
     }
     public void drawToScreen(){
@@ -386,6 +388,8 @@ public class GamePanel extends JPanel implements Runnable{
             if(nextArea == cave){
                 playMusic(19);
             }
+            
+            aSetter.setNPC();   //resets positions of NPC. ment for the big rock
         }
         
         currentArea = nextArea;

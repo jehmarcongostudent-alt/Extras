@@ -58,9 +58,9 @@ public class Player extends Entity{
         worldX = gp.tileSize * 6;  //starting position
         worldY = gp.tileSize * 2;  //starting postion
         //for testing
-        worldX = gp.tileSize*26;
-        worldY = gp.tileSize*24;
-        gp.currentMap = 1;
+//        worldX = gp.tileSize*22;
+//        worldY = gp.tileSize*4;
+//        gp.currentMap = 3;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -71,9 +71,9 @@ public class Player extends Entity{
         life = maxLife;
         maxEnergy = 20;
         energy = maxEnergy;
-        strength = 1;   //strenth = damage
+        strength = 5;   //strenth = damage
         dexterity = 1;  //dex = less damage
-        exp = 0;
+        exp = 999999999;
         nextLevelExp = 5;
         coin = 50000;
         currentWeapon = new OBJ_Sword_Normal(gp);
@@ -83,7 +83,7 @@ public class Player extends Entity{
         projectile = new OBJ_Arrow(gp);
         attack = getAttack();   //total attack is from strenth and weapon
         defense = getDefense(); //total shield is from dex and shield
-
+        
         playerClasses();
         getImage();
         getAttackImage();
@@ -93,6 +93,7 @@ public class Player extends Entity{
     }
     public void setDefaultPositions(){
         
+        gp.currentMap = 0;
         worldX = gp.tileSize * 6;
         worldY = gp.tileSize * 2;
         direction = "down";
@@ -225,6 +226,16 @@ public class Player extends Entity{
             attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_axe_left1", gp.tileSize*2, gp.tileSize);
             attackRight0 = setup("/player/"+avatar+"/"+avatar+"_axe_right0", gp.tileSize*2, gp.tileSize);
             attackRight1 = setup("/player/"+avatar+"/"+avatar+"_axe_right1", gp.tileSize*2, gp.tileSize);
+        }
+        if(currentWeapon.type == type_pickaxe){
+            attackUp0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_up0", gp.tileSize, gp.tileSize*2);
+            attackUp1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_up1", gp.tileSize, gp.tileSize*2);
+            attackDown0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_down0", gp.tileSize, gp.tileSize*2);
+            attackDown1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_down1", gp.tileSize, gp.tileSize*2);
+            attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_left0", gp.tileSize*2, gp.tileSize);
+            attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_left1", gp.tileSize*2, gp.tileSize);
+            attackRight0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_right0", gp.tileSize*2, gp.tileSize);
+            attackRight1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_right1", gp.tileSize*2, gp.tileSize);
         }
     }
     public void getGuardImage(){
@@ -400,10 +411,13 @@ public class Player extends Entity{
         if(energy > maxEnergy){
             energy = maxEnergy;
         }
-        if(life <= 0){
-            gp.gameState = gp.gameOverState;
-            gp.ui.commandNum = -1;
-            gp.playSE(12);
+        if(keyH.godModeOn == false){
+            if(life <= 0){
+                gp.gameState = gp.gameOverState;
+                gp.ui.commandNum = -1;
+                gp.playSE(12);
+            }
+            
         }
     }
     public void pickUpObject(int i){
@@ -446,6 +460,8 @@ public class Player extends Entity{
                 attackCanceled = true;
                 gp.npc[gp.currentMap][i].speak();
             }
+            
+            gp.npc[gp.currentMap][i].move(direction);
         }
     }
     public void contactMonster(int i){
@@ -514,6 +530,7 @@ public class Player extends Entity{
             generateParticle(gp.iTile[gp.currentMap][i],gp.iTile[gp.currentMap][i]);
             
             if(gp.iTile[gp.currentMap][i].life == 0){
+                gp.iTile[gp.currentMap][i].checkDrop();
                 gp.iTile[gp.currentMap][i] = gp.iTile[gp.currentMap][i].getDestroyedForm(); 
             }
         }
@@ -555,7 +572,7 @@ public class Player extends Entity{
             
             Entity selectedItem = inventory.get(itemIndex);
             
-            if (selectedItem.type == type_sword || selectedItem.type == type_axe){
+            if (selectedItem.type == type_sword || selectedItem.type == type_axe || selectedItem.type == type_pickaxe){
                 
                 currentWeapon = selectedItem;
                 attack = getAttack();

@@ -37,6 +37,8 @@ public class Sound {
         soundURL[17] = getClass().getResource("/sound/speak.wav");
         soundURL[18] = getClass().getResource("/sound/Merchant.wav");
         soundURL[19] = getClass().getResource("/sound/Dungeon.wav");
+        soundURL[20] = getClass().getResource("/sound/chipwall.wav");
+        soundURL[21] = getClass().getResource("/sound/dooropen.wav");
     }
     
     public void setFile(int i){
@@ -61,8 +63,9 @@ public class Sound {
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
     public void stop(){
-        
-        clip.stop();
+        if (clip != null){
+            clip.stop();
+        }
     }
     public void checkVolume(){
         
