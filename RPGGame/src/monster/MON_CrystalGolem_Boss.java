@@ -1,10 +1,12 @@
 package monster;
 
+import data.Progress;
 import entity.Entity;
 import java.util.Random;
 import object.OBJ_Boots;
 import object.OBJ_Bow_Arrow;
 import object.OBJ_Coin_Bronze;
+import object.OBJ_Door_Iron;
 import object.OBJ_Heart;
 import rpggame.GamePanel;
 
@@ -19,6 +21,7 @@ public class MON_CrystalGolem_Boss extends Entity{
         this.gp = gp;
         
         type = type_monster;
+        boss = true;
         name = monName;
         defaultSpeed = 1;
         speed = defaultSpeed;
@@ -28,6 +31,7 @@ public class MON_CrystalGolem_Boss extends Entity{
         defense = 2;
         exp = 50;
         knockBackPower = 5;
+        sleep = true;
         
         int size = gp.tileSize*5;
         solidArea.x = 48;
@@ -43,6 +47,7 @@ public class MON_CrystalGolem_Boss extends Entity{
         
         getImage();
         getAttackImage();
+        setDialogue();
     }
     public void getImage(){
         
@@ -102,6 +107,12 @@ public class MON_CrystalGolem_Boss extends Entity{
             attackRight1 = setup("/monster/golem_boss_phase2_attack_right2", gp.tileSize*imageSize*2, gp.tileSize*imageSize);
         }
     }
+    public void setDialogue(){
+        
+        dialogues[0][0] = "*wake*";
+        dialogues[0][1] = "RAAAAAAAAH!!";
+        dialogues[0][2] = "RAAAAAAAAHHHHHHHHHHHHHH!!!";
+    }
     public void setAction(){
         
         if(inRage == false && life < maxLife/2){
@@ -134,6 +145,21 @@ public class MON_CrystalGolem_Boss extends Entity{
         onPath = true;
     }
     public void checkDrop(){
+        
+        gp.bossBattleOn = false;
+        Progress.crystalGolemDefeated = true;
+        
+        //Resore previous music
+        gp.stopMusic();
+        gp.playMusic(19);
+
+        //Remove the iron doors
+        for(int i = 0; i < gp.obj[1].length; i++){
+            if(gp.obj[gp.currentMap][1] != null && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName)){
+                gp.playSE(21);
+                gp.obj[gp.currentMap][i] = null;
+            }
+        }
         
         //CAST A DIE(random number)
         int i = new Random().nextInt(100)+1;

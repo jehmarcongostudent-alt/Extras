@@ -151,6 +151,13 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldY = gp.tileSize*45;
         i++;
         
+        mapNum = 3;
+        i = 0;
+        //Iron Doors
+        gp.obj[mapNum][i] = new OBJ_Door_Iron(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*30;
+        gp.obj[mapNum][i].worldY = gp.tileSize*21;
+        i++;
     }
     public void setNPC(){
         
@@ -265,7 +272,7 @@ public class AssetSetter {
         i++;
         gp.monster[mapNum][i] = new MON_CrystalGolem_Boss(gp);
         gp.monster[mapNum][i].worldX =gp.tileSize*32;
-        gp.monster[mapNum][i].worldY =gp.tileSize*36;
+        gp.monster[mapNum][i].worldY =gp.tileSize*30;
     }
     public void setInteractiveTile(){
         

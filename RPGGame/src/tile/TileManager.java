@@ -70,7 +70,7 @@ public class TileManager {
         loadMap("/maps/world01.txt", 0);
         loadMap("/maps/shop.txt", 1);
         loadMap("/maps/cave01.txt", 2);
-        loadMap("/maps/cave01.txt", 3); //place holder
+        loadMap("/maps/cave02.txt", 3);
         
         //loadMap("/maps/world01.txt");
     }

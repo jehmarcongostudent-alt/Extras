@@ -58,9 +58,9 @@ public class Player extends Entity{
         worldX = gp.tileSize * 6;  //starting position
         worldY = gp.tileSize * 2;  //starting postion
         //for testing
-//        worldX = gp.tileSize*22;
-//        worldY = gp.tileSize*4;
-//        gp.currentMap = 3;
+        worldX = gp.tileSize*26;
+        worldY = gp.tileSize*47;
+        gp.currentMap = 3;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -177,7 +177,6 @@ public class Player extends Entity{
         }
     }
     public void getImage(){
-        
         up0 = setup("/player/"+avatar+"/"+avatar+"_up0", gp.tileSize, gp.tileSize);
         up1 = setup("/player/"+avatar+"/"+avatar+"_up1", gp.tileSize, gp.tileSize);
         up2 = setup("/player/"+avatar+"/"+avatar+"_up2", gp.tileSize, gp.tileSize);
@@ -730,7 +729,9 @@ public class Player extends Entity{
         if(transparent == true){
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));                //sets visual for invinsible active state
         }
-        g2.drawImage(image, tempScreenX, tempScreenY, null);  //given image, xaxis, y axis, wight height, null?
+        if(drawing == true){
+            g2.drawImage(image, tempScreenX, tempScreenY, null);  //given image, xaxis, y axis, wight height, null?
+        }
     
         //Reset alpha
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));

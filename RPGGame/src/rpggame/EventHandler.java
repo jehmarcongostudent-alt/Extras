@@ -1,5 +1,6 @@
 package rpggame;
 
+import data.Progress;
 import entity.Entity;
 
 public class EventHandler {
@@ -75,8 +76,10 @@ public class EventHandler {
             else if(hit(1,26,24,"up") == true){speak(gp.npc[1][0]);}
             else if(hit(0,31,47,"any") == true){teleport(2,22,3,gp.cave); }     //to cave
             else if(hit(2,22,3,"any") == true){teleport(0,31,47,gp.outside); }     // to outside
-            else if(hit(2,30,48,"any") == true){teleport(3,22,3,gp.cave); }     //to cave2
-            else if(hit(3,22,3,"any") == true){teleport(2,30,48,gp.cave); }     // to back cave1
+            else if(hit(2,30,48,"any") == true){teleport(3,3,3,gp.cave); }     //to cave2
+            else if(hit(3,3,3,"any") == true){teleport(2,30,48,gp.cave); }     // to back cave1
+            else if(hit(3,22,3,"any") == true){teleport(2,30,48,gp.cave); }
+            else if(hit(3,34,45,"any") == true){crystalGolem(); }   //BOSS cutscene
             
         }
         
@@ -148,6 +151,13 @@ public class EventHandler {
             gp.gameState = gp.dialogueState;
             gp.player.attackCanceled = true;
             entity.speak();
+        }
+    }
+    public void crystalGolem(){
+        
+        if(gp.bossBattleOn == false && Progress.crystalGolemDefeated == false){
+            gp.gameState = gp.cutsceneState;
+            gp.csManager.sceneNum = gp.csManager.crystalGolem;
         }
     }
     

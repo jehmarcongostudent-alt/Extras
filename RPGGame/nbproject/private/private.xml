@@ -7,12 +7,8 @@
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/Player.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/GamePanel.java</file>
             <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/UI.java</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/object/OBJ_Tent.java</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/rpggame/EntityGenerator.java</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/data/SaveLoad.java</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/config</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/config.txt</file>
-            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/res/maps/tileData.txt</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/object/OBJ_Arrow.java</file>
+            <file>file:/C:/Users/Admin/Documents/currentGame/RPGGame/src/entity/Projectile.java</file>
         </group>
     </open-files>
 </project-private>
