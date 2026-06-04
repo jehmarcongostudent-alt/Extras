@@ -7,13 +7,22 @@ public class KeyHandler implements KeyListener{
     
     GamePanel gp;
     
-    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, enterPressed, shotKeyPressed, blockKeyPressed;
+    public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed, enterPressed, confirmPressed, shotKeyPressed, blockKeyPressed;
     //DEBUG
     public boolean showDebugText = false;
     public boolean godModeOn = false;
     
     public KeyHandler(GamePanel gp){
         this.gp = gp;
+    }
+    //lets enter and space have the same function when pressed
+    public boolean ConfirmPressed(){
+        if(enterPressed || spacePressed){
+            enterPressed = false;
+            spacePressed = false;
+            return true;
+        }
+        return false;
     }
     
     @Override

@@ -1,5 +1,6 @@
 package rpggame;
 
+import data.Progress;
 import entity.NPC_BigRock;
 import entity.NPC_shopKeeper;
 import entity.NPC_shopKeeper_seller;
@@ -158,6 +159,16 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = gp.tileSize*30;
         gp.obj[mapNum][i].worldY = gp.tileSize*21;
         i++;
+        
+        gp.obj[mapNum][i] = new OBJ_LegendaryItem(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*42;
+        gp.obj[mapNum][i].worldY = gp.tileSize*15;
+        i++;
+        
+        gp.obj[mapNum][i] = new OBJ_LegendaryItem(gp);
+        gp.obj[mapNum][i].worldX = gp.tileSize*29;
+        gp.obj[mapNum][i].worldY = gp.tileSize*44;
+        i++;
     }
     public void setNPC(){
         
@@ -270,9 +281,11 @@ public class AssetSetter {
         
         mapNum = 3;
         i++;
-        gp.monster[mapNum][i] = new MON_CrystalGolem_Boss(gp);
-        gp.monster[mapNum][i].worldX =gp.tileSize*32;
-        gp.monster[mapNum][i].worldY =gp.tileSize*30;
+        if(Progress.crystalGolemDefeated == false){
+            gp.monster[mapNum][i] = new MON_CrystalGolem_Boss(gp);
+            gp.monster[mapNum][i].worldX =gp.tileSize*32;
+            gp.monster[mapNum][i].worldY =gp.tileSize*30;
+        }
     }
     public void setInteractiveTile(){
         

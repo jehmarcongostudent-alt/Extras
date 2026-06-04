@@ -155,7 +155,7 @@ public class MON_CrystalGolem_Boss extends Entity{
 
         //Remove the iron doors
         for(int i = 0; i < gp.obj[1].length; i++){
-            if(gp.obj[gp.currentMap][1] != null && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName)){
+            if(gp.obj[gp.currentMap][i] != null && gp.obj[gp.currentMap][i].name.equals(OBJ_Door_Iron.objName)){
                 gp.playSE(21);
                 gp.obj[gp.currentMap][i] = null;
             }

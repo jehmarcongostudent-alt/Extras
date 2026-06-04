@@ -1,4 +1,5 @@
 package rpggame;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class Main {
@@ -10,7 +11,8 @@ public class Main {
         window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  //prevents window from running on the background when closed
         window.setResizable(false);
-        window.setTitle("2D RPG");
+        window.setTitle("J's 2D RPG");
+        new Main().setIcon();
         
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);
@@ -28,6 +30,11 @@ public class Main {
         gamePanel.setUpGame();
         gamePanel.startGameThread();
         
+    }
+    public void setIcon(){
+        
+        ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("player/mage/mage_down0.png"));
+        window.setIconImage(icon.getImage());
     }
     
 }
