@@ -2,9 +2,9 @@ package rpggame;
 
 import entity.Entity;
 import object.OBJ_Arrow;
-import object.OBJ_Axe;
-import object.OBJ_Axe_BattleAxe;
-import object.OBJ_Axe_Rusty;
+import object.equipments.OBJ_Axe;
+import object.equipments.OBJ_Axe_BattleAxe;
+import object.equipments.OBJ_Axe_Rusty;
 import object.OBJ_Boots;
 import object.OBJ_Bow_Arrow;
 import object.OBJ_Chest;
@@ -16,14 +16,17 @@ import object.OBJ_Key;
 import object.OBJ_Lantern;
 import object.OBJ_LegendaryItem;
 import object.OBJ_ManaPotion;
-import object.OBJ_Pickaxe;
+import object.equipments.OBJ_Pickaxe;
 import object.OBJ_Potion_Red;
 import object.OBJ_Rock;
 import object.OBJ_Shield_Blue;
 import object.OBJ_Shield_Wood;
-import object.OBJ_Sword_Normal;
+import object.equipments.OBJ_Sword_Normal;
 import object.OBJ_Tent;
 import object.OBJ_Torch;
+import object.equipments.OBJ_Sushiblade;
+import object.equipments.OBJ_Sword_Rapier;
+import object.equipments.OBJ_Sword_Scimitar;
 
 public class EntityGenerator {
     
@@ -58,6 +61,9 @@ public class EntityGenerator {
             case OBJ_Shield_Blue.objName: obj = new OBJ_Shield_Blue(gp); break;
             case OBJ_Shield_Wood.objName: obj = new OBJ_Shield_Wood(gp); break;
             case OBJ_Sword_Normal.objName: obj = new OBJ_Sword_Normal(gp); break;
+            case OBJ_Sword_Rapier.objName: obj = new OBJ_Sword_Rapier(gp); break;
+            case OBJ_Sword_Scimitar.objName: obj = new OBJ_Sword_Scimitar(gp); break;
+            case OBJ_Sushiblade.objName: obj = new OBJ_Sushiblade(gp); break;
             case OBJ_Tent.objName: obj = new OBJ_Tent(gp); break;
             case OBJ_Torch.objName: obj = new OBJ_Torch(gp); break;
         }

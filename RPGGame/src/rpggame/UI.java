@@ -546,9 +546,9 @@ public class UI {
         g2.drawString(value, textX, textY);
         textY += lineHeight;
         
-        g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY-24, null);
+        g2.drawImage(gp.player.currentWeapon.displayImage != null ? gp.player.currentWeapon.displayImage : gp.player.currentWeapon.down1, tailX - gp.tileSize, textY-24, null);
         textY += gp.tileSize;
-        g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY-24, null);
+        g2.drawImage(gp.player.currentShield.displayImage != null ? gp.player.currentShield.displayImage : gp.player.currentShield.down1, tailX - gp.tileSize, textY-24, null);
         
     }
     public void drawInventory(Entity entity, boolean cursor){
@@ -599,7 +599,8 @@ public class UI {
                 g2.fillRoundRect(slotX, slotY, gp.tileSize, gp.tileSize, 10, 10);
             }
             
-            g2.drawImage(entity.inventory.get(i).down1, slotX, slotY, null);
+            Entity item = entity.inventory.get(i);
+            g2.drawImage(item.displayImage != null ? item.displayImage : item.down1, slotX, slotY, null);
             
             //DISPLAY AMOUNT
             if(entity == gp.player && entity.inventory.get(i).amount > 1){

@@ -103,7 +103,11 @@ public class TileManager {
         
         try{
             tile[index] = new Tile();
-            tile[index].image = ImageIO.read(getClass().getResourceAsStream("/Tiles/" + imageName));
+            InputStream imageStream = getClass().getResourceAsStream("/tiles/" + imageName);
+            if(imageStream == null){
+                throw new IOException("Missing tile image: /tiles/" + imageName);
+            }
+            tile[index].image = ImageIO.read(imageStream);
             tile[index].image = uTool.scaleImage(tile[index].image, gp.tileSize, gp.tileSize);
             tile[index].collision = collision;  //blueprint for tile collision
         }

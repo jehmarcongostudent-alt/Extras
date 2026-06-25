@@ -12,13 +12,17 @@ import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import object.OBJ_Arrow;
-import object.OBJ_Axe;
-import object.OBJ_Axe_Rusty;
+import object.equipments.OBJ_Axe;
+import object.equipments.OBJ_Axe_Rusty;
 import object.OBJ_Key;
 import object.OBJ_Shield_Wood;
-import object.OBJ_Sword_Normal;
+import object.equipments.OBJ_Sword_Normal;
 import object.OBJ_Torch;
+import object.equipments.OBJ_Axe_Divine_Rhitta;
+import object.equipments.OBJ_Sword_Rapier;
+import object.equipments.OBJ_Sword_Scimitar;
 import rpggame.UtilityTool;
+import vfx.SlashEffect;
 
 public class Player extends Entity{
     
@@ -29,6 +33,9 @@ public class Player extends Entity{
     int standCounter = 0;
     public boolean attackCanceled = false;
     public boolean lightUpdated = false;
+    
+    // Default slash textures for fallback
+    public BufferedImage defaultSlash1, defaultSlash2, defaultSlash3;
     
     //player
     public String playerClass = "archer";   //setDefault class as archer
@@ -58,9 +65,9 @@ public class Player extends Entity{
         worldX = gp.tileSize * 6;  //starting position
         worldY = gp.tileSize * 2;  //starting postion
         //for testing
-        worldX = gp.tileSize*26;
-        worldY = gp.tileSize*47;
-        gp.currentMap = 3;
+//        worldX = gp.tileSize*26;
+//        worldY = gp.tileSize*47;
+//        gp.currentMap = 3;
         defaultSpeed = 4;
         speed = defaultSpeed;
         direction = "down";
@@ -73,7 +80,7 @@ public class Player extends Entity{
         energy = maxEnergy;
         strength = 5;   //strenth = damage
         dexterity = 1;  //dex = less damage
-        exp = 999999999;
+        exp = 0;
         nextLevelExp = 5;
         coin = 50000;
         currentWeapon = new OBJ_Sword_Normal(gp);
@@ -84,9 +91,14 @@ public class Player extends Entity{
         attack = getAttack();   //total attack is from strenth and weapon
         defense = getDefense(); //total shield is from dex and shield
         
+        //weapon stats
+        windupTime = 2;
+        strikeTime = 18;
+        attackDuration = windupTime + strikeTime;
+        
         playerClasses();
         getImage();
-        getAttackImage();
+//        getAttackImage();
         getGuardImage();
         setItems();
         setDialogue();
@@ -124,6 +136,9 @@ public class Player extends Entity{
         }
         inventory.add(new OBJ_Key(gp));
         inventory.add(new OBJ_Axe_Rusty(gp));
+        inventory.add(new OBJ_Axe_Divine_Rhitta(gp));
+        inventory.add(new OBJ_Sword_Rapier(gp));
+        inventory.add(new OBJ_Sword_Scimitar(gp));
     }
     public int getAttack(){
         attackArea = currentWeapon.attackArea;
@@ -189,6 +204,18 @@ public class Player extends Entity{
         right0 = setup("/player/"+avatar+"/"+avatar+"_right0", gp.tileSize, gp.tileSize);
         right1 = setup("/player/"+avatar+"/"+avatar+"_right1", gp.tileSize, gp.tileSize);
         right2 = setup("/player/"+avatar+"/"+avatar+"_right2", gp.tileSize, gp.tileSize);
+        
+        headDown0 = setup("/player/"+avatar+"/"+avatar+"_down_head1", gp.tileSize, gp.tileSize);
+        headDown1 = setup("/player/"+avatar+"/"+avatar+"_down_head2", gp.tileSize, gp.tileSize);
+        headLeft0 = setup("/player/"+avatar+"/"+avatar+"_left_head1", gp.tileSize, gp.tileSize);
+        headLeft1 = setup("/player/"+avatar+"/"+avatar+"_left_head2", gp.tileSize, gp.tileSize);
+        headRight0 = setup("/player/"+avatar+"/"+avatar+"_right_head1", gp.tileSize, gp.tileSize);
+        headRight1 = setup("/player/"+avatar+"/"+avatar+"_right_head2", gp.tileSize, gp.tileSize);
+        
+        // 🔥 Load the default slash effects here
+        defaultSlash1 = setup("/vfx/slash1", gp.tileSize, gp.tileSize);
+        defaultSlash2 = setup("/vfx/slash2", gp.tileSize, gp.tileSize);
+        defaultSlash3 = setup("/vfx/slash3", gp.tileSize, gp.tileSize);
     }
     public void getSleepingImage(BufferedImage image){
         up0 = image;
@@ -204,39 +231,39 @@ public class Player extends Entity{
         right1 = image;
         right2 = image;
     }
-    public void getAttackImage(){
-        
-        if(currentWeapon.type == type_sword){
-            attackUp0 = setup("/player/"+avatar+"/"+avatar+"_attack_up0", gp.tileSize, gp.tileSize*2);
-            attackUp1 = setup("/player/"+avatar+"/"+avatar+"_attack_up1", gp.tileSize, gp.tileSize*2);
-            attackDown0 = setup("/player/"+avatar+"/"+avatar+"_attack_down0", gp.tileSize, gp.tileSize*2);
-            attackDown1 = setup("/player/"+avatar+"/"+avatar+"_attack_down1", gp.tileSize, gp.tileSize*2);
-            attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_attack_left0", gp.tileSize*2, gp.tileSize);
-            attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_attack_left1", gp.tileSize*2, gp.tileSize);
-            attackRight0 = setup("/player/"+avatar+"/"+avatar+"_attack_right0", gp.tileSize*2, gp.tileSize);
-            attackRight1 = setup("/player/"+avatar+"/"+avatar+"_attack_right1", gp.tileSize*2, gp.tileSize);
-        }
-        if(currentWeapon.type == type_axe){
-            attackUp0 = setup("/player/"+avatar+"/"+avatar+"_axe_up0", gp.tileSize, gp.tileSize*2);
-            attackUp1 = setup("/player/"+avatar+"/"+avatar+"_axe_up1", gp.tileSize, gp.tileSize*2);
-            attackDown0 = setup("/player/"+avatar+"/"+avatar+"_axe_down0", gp.tileSize, gp.tileSize*2);
-            attackDown1 = setup("/player/"+avatar+"/"+avatar+"_axe_down1", gp.tileSize, gp.tileSize*2);
-            attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_axe_left0", gp.tileSize*2, gp.tileSize);
-            attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_axe_left1", gp.tileSize*2, gp.tileSize);
-            attackRight0 = setup("/player/"+avatar+"/"+avatar+"_axe_right0", gp.tileSize*2, gp.tileSize);
-            attackRight1 = setup("/player/"+avatar+"/"+avatar+"_axe_right1", gp.tileSize*2, gp.tileSize);
-        }
-        if(currentWeapon.type == type_pickaxe){
-            attackUp0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_up0", gp.tileSize, gp.tileSize*2);
-            attackUp1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_up1", gp.tileSize, gp.tileSize*2);
-            attackDown0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_down0", gp.tileSize, gp.tileSize*2);
-            attackDown1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_down1", gp.tileSize, gp.tileSize*2);
-            attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_left0", gp.tileSize*2, gp.tileSize);
-            attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_left1", gp.tileSize*2, gp.tileSize);
-            attackRight0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_right0", gp.tileSize*2, gp.tileSize);
-            attackRight1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_right1", gp.tileSize*2, gp.tileSize);
-        }
-    }
+//    public void getAttackImage(){
+//        
+//        if(currentWeapon.type == type_sword){
+//            attackUp0 = setup("/player/"+avatar+"/"+avatar+"_attack_up0", gp.tileSize, gp.tileSize*2);
+//            attackUp1 = setup("/player/"+avatar+"/"+avatar+"_attack_up1", gp.tileSize, gp.tileSize*2);
+//            attackDown0 = setup("/player/"+avatar+"/"+avatar+"_attack_down0", gp.tileSize, gp.tileSize*2);
+//            attackDown1 = setup("/player/"+avatar+"/"+avatar+"_attack_down1", gp.tileSize, gp.tileSize*2);
+//            attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_attack_left0", gp.tileSize*2, gp.tileSize);
+//            attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_attack_left1", gp.tileSize*2, gp.tileSize);
+//            attackRight0 = setup("/player/"+avatar+"/"+avatar+"_attack_right0", gp.tileSize*2, gp.tileSize);
+//            attackRight1 = setup("/player/"+avatar+"/"+avatar+"_attack_right1", gp.tileSize*2, gp.tileSize);
+//        }
+//        if(currentWeapon.type == type_axe){
+//            attackUp0 = setup("/player/"+avatar+"/"+avatar+"_axe_up0", gp.tileSize, gp.tileSize*2);
+//            attackUp1 = setup("/player/"+avatar+"/"+avatar+"_axe_up1", gp.tileSize, gp.tileSize*2);
+//            attackDown0 = setup("/player/"+avatar+"/"+avatar+"_axe_down0", gp.tileSize, gp.tileSize*2);
+//            attackDown1 = setup("/player/"+avatar+"/"+avatar+"_axe_down1", gp.tileSize, gp.tileSize*2);
+//            attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_axe_left0", gp.tileSize*2, gp.tileSize);
+//            attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_axe_left1", gp.tileSize*2, gp.tileSize);
+//            attackRight0 = setup("/player/"+avatar+"/"+avatar+"_axe_right0", gp.tileSize*2, gp.tileSize);
+//            attackRight1 = setup("/player/"+avatar+"/"+avatar+"_axe_right1", gp.tileSize*2, gp.tileSize);
+//        }
+//        if(currentWeapon.type == type_pickaxe){
+//            attackUp0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_up0", gp.tileSize, gp.tileSize*2);
+//            attackUp1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_up1", gp.tileSize, gp.tileSize*2);
+//            attackDown0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_down0", gp.tileSize, gp.tileSize*2);
+//            attackDown1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_down1", gp.tileSize, gp.tileSize*2);
+//            attackLeft0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_left0", gp.tileSize*2, gp.tileSize);
+//            attackLeft1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_left1", gp.tileSize*2, gp.tileSize);
+//            attackRight0 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_right0", gp.tileSize*2, gp.tileSize);
+//            attackRight1 = setup("/player/"+avatar+"/"+avatar+"_pickaxe_right1", gp.tileSize*2, gp.tileSize);
+//        }
+//    }
     public void getGuardImage(){
         
         guardUp = setup("/player/"+avatar+"/"+avatar+"_shield_up", gp.tileSize, gp.tileSize);
@@ -279,6 +306,14 @@ public class Player extends Entity{
         
         else if(attacking == true){
             attacking();
+            
+            //added by AI counts the attack duration when attacking
+            attackCounter++;
+            
+            // 🔥 SPAWN SLASH AT STRIKE MOMENT
+            if(attackCounter == currentWeapon.motion1_duration){
+                spawnSlash();
+            }
         }
         else if(keyH.blockKeyPressed == true){
             guarding = true;
@@ -341,6 +376,7 @@ public class Player extends Entity{
                 gp.playSE(7);
                 attacking = true;
                 spriteCounter = 0;
+                attackCounter = 0;
             }
             
             attackCanceled = false;
@@ -417,6 +453,16 @@ public class Player extends Entity{
                 gp.playSE(12);
             }
             
+        }
+        for(int i = 0; i < slashEffects.size(); i++){
+            SlashEffect s = slashEffects.get(i);
+
+            s.update();
+
+            if(!s.isAlive()){
+                slashEffects.remove(i);
+                i--;
+            }
         }
     }
     public void pickUpObject(int i){
@@ -575,7 +621,7 @@ public class Player extends Entity{
                 
                 currentWeapon = selectedItem;
                 attack = getAttack();
-                getAttackImage();
+//                getAttackImage();
             }
             if(selectedItem.type == type_shield){
                 
@@ -654,12 +700,28 @@ public class Player extends Entity{
     }
     public void draw(Graphics2D g2){
         
-        //g2.setColor(Color.white);
-        //g2.fillRect(x, y, gp.tileSize, gp.tileSize);  //holds the x, y coordinates and  width, height. Draws rectangle and fills it with specified colors.
-        
         BufferedImage image = null;
         int tempScreenX = screenX;
         int tempScreenY = screenY;
+        
+        BufferedImage headImage = null;
+        switch(direction){
+            case "down":
+                if(guarding == true){ headImage = headDown1; }
+                else if(spriteNum == 0 || spriteNum == 2){ headImage = headDown0; }
+                else if(spriteNum == 1){ headImage = headDown1; }
+                break;
+            case "left":
+                if(guarding == true){ headImage = headLeft1; }
+                else if(spriteNum == 0 || spriteNum == 2){ headImage = headLeft0; }
+                else if(spriteNum == 1){ headImage = headLeft1; }
+                break;
+            case "right":
+                if(guarding == true){ headImage = headRight1; }
+                else if(spriteNum == 0 || spriteNum == 2){ headImage = headRight0; }
+                else if(spriteNum == 1){ headImage = headRight1; }
+                break;
+        }
         
         switch(direction){
             case "up":
@@ -669,10 +731,10 @@ public class Player extends Entity{
                     if(spriteNum == 2){image = up2;}
                 }
                 if(attacking == true){
-                    tempScreenY = screenY - gp.tileSize;
-                    if(spriteNum == 0){image = attackUp0;}
-                    if(spriteNum == 1){image = attackUp1;}
-                    if(spriteNum == 2){image = attackUp1;}
+//                    tempScreenY = screenY - gp.tileSize;
+                    if(spriteNum == 0){image = up0;}
+                    if(spriteNum == 1){image = up1;}
+                    if(spriteNum == 2){image = up2;}
                 }
                 if(guarding == true){
                     image = guardUp;
@@ -685,9 +747,9 @@ public class Player extends Entity{
                     if(spriteNum == 2){image = down2;}
                 }
                 if(attacking == true){
-                    if(spriteNum == 0){image = attackDown0;}
-                    if(spriteNum == 1){image = attackDown1;}
-                    if(spriteNum == 2){image = attackDown1;}
+                    if(spriteNum == 0){image = down0;}
+                    if(spriteNum == 1){image = down1;}
+                    if(spriteNum == 2){image = down2;}
                 }
                 if(guarding == true){
                     image = guardDown;
@@ -700,10 +762,10 @@ public class Player extends Entity{
                     if(spriteNum == 2){image = left2;}
                 }
                 if(attacking == true){
-                    tempScreenX = screenX - gp.tileSize;
-                    if(spriteNum == 0){image = attackLeft0;}
-                    if(spriteNum == 1){image = attackLeft1;}
-                    if(spriteNum == 2){image = attackLeft1;}
+//                    tempScreenX = screenX - gp.tileSize;
+                    if(spriteNum == 0){image = left0;}
+                    if(spriteNum == 1){image = left1;}
+                    if(spriteNum == 2){image = left2;}
                 }
                 if(guarding == true){
                     image = guardLeft;
@@ -716,9 +778,9 @@ public class Player extends Entity{
                     if(spriteNum == 2){image = right2;}
                 }
                 if(attacking == true){
-                    if(spriteNum == 0){image = attackRight0;}
-                    if(spriteNum == 1){image = attackRight1;}
-                    if(spriteNum == 2){image = attackRight1;}
+                    if(spriteNum == 0){image = right0;}
+                    if(spriteNum == 1){image = right1;}
+                    if(spriteNum == 2){image = right2;}
                 }
                 if(guarding == true){
                     image = guardRight;
@@ -730,15 +792,190 @@ public class Player extends Entity{
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));                //sets visual for invinsible active state
         }
         if(drawing == true){
-            g2.drawImage(image, tempScreenX, tempScreenY, null);  //given image, xaxis, y axis, wight height, null?
+            if(direction.equals("up")) {
+                g2.drawImage(image, tempScreenX, tempScreenY, null);
+                drawWeapon(g2, tempScreenX, tempScreenY);
+            }
+            else{
+                g2.drawImage(image, tempScreenX, tempScreenY, null);
+                drawWeapon(g2, tempScreenX, tempScreenY);
+                if(!guarding){
+                    g2.drawImage(headImage, tempScreenX, tempScreenY, null);
+                }
+            }
         }
     
         //Reset alpha
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         
-        //DEBUG to view invincibility counter
-        //g2.setFont(new Font("Arial", Font.PLAIN, 26));
-        //g2.setColor(Color.white);
-        //g2.drawString("Invincible: " + invincibleCounter, 10, 400);
+        for(SlashEffect s : slashEffects){
+            s.draw(g2);
+        }
+        
+        // DEBUG: draw solid and attack areas
+        if(gp.keyH.showDebugHitbox == true){
+            g2.setColor(new Color(0, 255, 0, 100));
+            g2.fillRect(tempScreenX + solidArea.x, tempScreenY + solidArea.y, solidArea.width, solidArea.height);
+
+            if(showAttackArea == true){
+                Rectangle attackBounds = getAttackAreaBounds();
+                int attackScreenX = attackBounds.x - worldX + tempScreenX;
+                int attackScreenY = attackBounds.y - worldY + tempScreenY;
+                g2.setColor(new Color(255, 0, 0, 255));
+                g2.drawRect(attackScreenX, attackScreenY, attackArea.width, attackArea.height);
+            }
+        }
+    }
+        public void drawWeapon(Graphics2D g2, int x, int y){
+            
+        if(currentWeapon == null) return;
+        BufferedImage weaponImage = currentWeapon.attackDown0 != null ? currentWeapon.attackDown0 : currentWeapon.down1;
+        if(weaponImage == null) return;
+        
+        int windupTime = currentWeapon.motion1_duration;
+        int strikeTime = currentWeapon.motion2_duration;
+
+
+        if(!attacking){
+            if(currentWeapon.showHeld == false) return;
+
+            BufferedImage heldImage = currentWeapon.down1;
+            if(heldImage == null) return;
+
+            Graphics2D g2d = (Graphics2D) g2.create();
+
+            double heldAngle = 0;
+            switch(direction){
+                case "up":    heldAngle = Math.toRadians(180); currentWeapon.heldFlipHorizontal = true;  break;
+                case "down":  heldAngle = Math.toRadians(90);  currentWeapon.heldFlipHorizontal = false; break;
+                case "left":  heldAngle = Math.toRadians(180); currentWeapon.heldFlipHorizontal = true;  break;
+                case "right": heldAngle = Math.toRadians(90);  currentWeapon.heldFlipHorizontal = false; break;
+            }
+            heldAngle += Math.toRadians(currentWeapon.heldRotation);
+
+            int gripX = currentWeapon.weaponGripX >= 0 ? currentWeapon.weaponGripX : heldImage.getWidth() / 2;
+            int gripY = currentWeapon.weaponGripY >= 0 ? currentWeapon.weaponGripY : heldImage.getHeight() - 8;
+
+            int drawX = x + gp.tileSize / 2 + currentWeapon.heldOffsetX;
+            int drawY = y + gp.tileSize / 2 + currentWeapon.heldOffsetY;
+        switch(direction){
+            case "down":
+            case "right":
+                drawX += currentWeapon.heldAnchorX;
+                drawY += currentWeapon.heldAnchorY;
+                break;
+            case "up":
+            case "left":
+                drawX += currentWeapon.heldAnchorX;
+                drawY += currentWeapon.heldAnchorY;
+                drawX += (heldImage.getHeight() - 2 * gripY)- 10;
+                drawY -= (heldImage.getWidth() - 2 * gripX)- 40;
+                break;
+        }
+
+            g2d.translate(drawX, drawY);
+            g2d.rotate(heldAngle);
+
+            java.awt.geom.AffineTransform imgTransform = new java.awt.geom.AffineTransform();
+            imgTransform.translate(-gripX, -gripY);
+            if(currentWeapon.heldFlipHorizontal){
+                imgTransform.scale(-1, 1);
+                imgTransform.translate(-heldImage.getWidth(), 0);
+            }
+            imgTransform.rotate(currentWeapon.spriteRotation, gripX, gripY);
+
+            g2d.drawImage(heldImage, imgTransform, null);
+            g2d.dispose();
+            return;
+        }
+        
+        int handX = x + gp.tileSize / 2 + currentWeapon.weaponOffsetX;
+        int handY = y + gp.tileSize / 2 + currentWeapon.weaponOffsetY;
+        switch(direction){
+            case "up": handY -= currentWeapon.weaponPivotDistance; break;
+            case "down": handY += currentWeapon.weaponPivotDistance; break;
+            case "left": handX -= currentWeapon.weaponPivotDistance; break;
+            case "right": handX += currentWeapon.weaponPivotDistance; break;
+        }
+        int gripX = currentWeapon.weaponGripX >= 0 ? currentWeapon.weaponGripX : weaponImage.getWidth() / 2;
+        int gripY = currentWeapon.weaponGripY >= 0 ? currentWeapon.weaponGripY : weaponImage.getHeight() - 8;
+
+        Graphics2D g2d = (Graphics2D) g2.create();
+
+        double baseAngle = 0;
+
+        switch(direction){
+            case "up": baseAngle = Math.toRadians(270); break;
+            case "down": baseAngle = Math.toRadians(90); break;
+            case "left": baseAngle = Math.toRadians(180); break;
+            case "right": baseAngle = Math.toRadians(0); break;
+        }
+
+        baseAngle += Math.toRadians(90);
+
+        double angle = baseAngle;
+
+        if(attacking){
+
+            if(spriteCounter < currentWeapon.motion1_duration){
+                angle = baseAngle - Math.toRadians(80);
+            }
+            else if(spriteCounter < currentWeapon.motion1_duration + currentWeapon.motion2_duration){
+                angle = baseAngle + Math.toRadians(80);
+            }
+            else{
+                return;
+            }
+        }
+
+        g2d.translate(handX, handY);
+        g2d.rotate(angle); // swing rotation only, no spriteRotation here
+
+        // rotate the image itself separately around its grip point
+        java.awt.geom.AffineTransform imgTransform = new java.awt.geom.AffineTransform();
+        float arcScale = 1.0f + (currentWeapon.weaponArcDistance / 100.0f);
+
+        imgTransform.translate((int)(-gripX * arcScale), (int)(-gripY * arcScale));
+        imgTransform.rotate(currentWeapon.spriteRotation, gripX, gripY);
+
+        g2d.drawImage(weaponImage, imgTransform, null);
+        g2d.dispose();
+
+    }
+    public void spawnSlash(){
+
+         // 1. Create the container for the frames
+        BufferedImage[] frames = new BufferedImage[3];
+
+        // 2. Check if the current weapon actually has custom slash effects loaded
+        if(currentWeapon != null && currentWeapon.slashFrames != null) {
+            // Use the weapon's unique animations!
+            frames = currentWeapon.slashFrames;
+        } 
+        else {
+            // ✅ FALLBACK: Use a basic default slash if the weapon has none
+            frames[0] = defaultSlash1; // Loaded in Player's setDefaultValues()
+            frames[1] = defaultSlash2;
+            frames[2] = defaultSlash3;
+        }
+
+        int slashX = worldX; // adjust later
+        int slashY = worldY;
+
+        switch(direction){
+            case "up":    slashY -= gp.tileSize; break; // Spawns 1 tile above
+            case "down":  slashY += gp.tileSize; break; // Spawns 1 tile below
+            case "left":  slashX -= gp.tileSize; break; // Spawns 1 tile left
+            case "right": slashX += gp.tileSize; break; // Spawns 1 tile right
+        }
+        
+        // 3. Only pass it forward if we successfully grabbed frames to prevent null crashes
+        if(frames != null) {
+            // 1. Grab the size from the weapon, defaulting to 1 if something goes wrong
+            int weaponSlashSize = (currentWeapon != null) ? currentWeapon.slashSize : 1;
+
+            // 2. ✅ Pass weaponSlashSize as the final argument
+            slashEffects.add(new SlashEffect(gp, slashX, slashY, frames, direction, weaponSlashSize)); 
+        }
     }
 }

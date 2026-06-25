@@ -1,7 +1,7 @@
 package entity;
 
 import java.util.Random;
-import object.OBJ_Axe;
+import object.equipments.OBJ_Axe;
 import object.OBJ_Boots;
 import object.OBJ_Key;
 import object.OBJ_Potion_Red;

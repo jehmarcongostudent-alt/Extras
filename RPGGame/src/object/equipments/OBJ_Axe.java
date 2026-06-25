@@ -1,0 +1,26 @@
+package object.equipments;
+
+import entity.Entity;
+import rpggame.GamePanel;
+
+
+public class OBJ_Axe extends Equipment{
+    
+    public static final String objName = "Woodcutter's Axe";
+    
+    public OBJ_Axe(GamePanel gp){
+        super(gp);
+        
+        type = type_axe;
+        name = objName;
+        down1 = setup("/objects/axe", gp.tileSize, gp.tileSize);
+        attackValue = 2;
+        attackArea.width = 30;
+        attackArea.height = 30;
+        description = "[" + name + "]\ncuts wood and more.";
+        price = 100;
+        knockBackPower = 10;
+        motion1_duration = 20;
+        motion2_duration = 40;
+    }
+}

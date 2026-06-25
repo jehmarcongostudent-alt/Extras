@@ -11,6 +11,7 @@ public class KeyHandler implements KeyListener{
     //DEBUG
     public boolean showDebugText = false;
     public boolean godModeOn = false;
+    public boolean showDebugHitbox = false;
     
     public KeyHandler(GamePanel gp){
         this.gp = gp;
@@ -213,9 +214,11 @@ public class KeyHandler implements KeyListener{
         if(code == KeyEvent.VK_T){
             if(showDebugText == false){
                 showDebugText = true;
+                showDebugHitbox = true;
             }
             else if(showDebugText == true){
                 showDebugText = false;
+                showDebugHitbox = false;
             }
         }
         if(code == KeyEvent.VK_R){

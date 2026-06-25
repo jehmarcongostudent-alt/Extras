@@ -1,5 +1,8 @@
 package rpggame;
 
+import object.equipments.OBJ_Pickaxe;
+import object.equipments.OBJ_Axe_BattleAxe;
+import object.equipments.OBJ_Axe;
 import data.Progress;
 import entity.NPC_BigRock;
 import entity.NPC_shopKeeper;
@@ -13,6 +16,7 @@ import monster.MON_Orc2;
 import monster.MON_Orc3;
 import monster.MON_shopKeeperTwin;
 import object.*;
+import object.equipments.OBJ_Sushiblade;
 import tile_interactive.IT_DestructibleWall;
 import tile_interactive.IT_DryTree;
 import tile_interactive.IT_MetalPlate;
@@ -78,7 +82,7 @@ public class AssetSetter {
         gp.obj[mapNum][i].worldX = gp.tileSize*15;
         gp.obj[mapNum][i].worldY = gp.tileSize*10;
         i++;
-        gp.obj[mapNum][i] = new OBJ_Potion_Red(gp);
+        gp.obj[mapNum][i] = new OBJ_Sushiblade(gp);
         gp.obj[mapNum][i].worldX = gp.tileSize*16;
         gp.obj[mapNum][i].worldY = gp.tileSize*10;
         i++;

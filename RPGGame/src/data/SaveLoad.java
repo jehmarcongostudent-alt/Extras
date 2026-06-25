@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import object.OBJ_Axe;
-import object.OBJ_Axe_BattleAxe;
-import object.OBJ_Axe_Rusty;
+import object.equipments.OBJ_Axe;
+import object.equipments.OBJ_Axe_BattleAxe;
+import object.equipments.OBJ_Axe_Rusty;
 import object.OBJ_Boots;
 import object.OBJ_Chest;
 import object.OBJ_Coin_Bronze;
@@ -21,7 +21,7 @@ import object.OBJ_Potion_Red;
 import object.OBJ_Rock;
 import object.OBJ_Shield_Blue;
 import object.OBJ_Shield_Wood;
-import object.OBJ_Sword_Normal;
+import object.equipments.OBJ_Sword_Normal;
 import object.OBJ_Tent;
 import object.OBJ_Torch;
 
@@ -126,7 +126,7 @@ public class SaveLoad {
             gp.player.currentShield = gp.player.inventory.get(ds.currentShieldSlot);
             gp.player.getAttack();
             gp.player.getDefense();
-            gp.player.getAttackImage();
+//            gp.player.getAttackImage();
             
             //OBJECT ON MAP
             for(int mapNum = 0; mapNum < gp.maxMap; mapNum++){

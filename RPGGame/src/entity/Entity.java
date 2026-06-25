@@ -11,6 +11,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import rpggame.GamePanel;
 import rpggame.UtilityTool;
+import vfx.SlashEffect;
 
 public class Entity {
     
@@ -18,7 +19,8 @@ public class Entity {
     public BufferedImage up0, up1, up2, down0, down1, down2, left0, left1, left2, right0, right1, right2;  //describes image with an accessible buffer of image data (used to store image files)
     public BufferedImage attackUp0, attackUp1, attackDown0, attackDown1, attackLeft0, attackLeft1, attackRight0, attackRight1, 
             guardUp, guardDown, guardLeft, guardRight;
-    public BufferedImage image, image2, image3;
+    public BufferedImage headUp0, headUp1, headDown0, headDown1, headLeft0, headLeft1, headRight0, headRight1;
+    public BufferedImage image, image2, image3, displayImage;
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0);
     public int solidAreaDefaultX, solidAreaDefaultY;
@@ -62,6 +64,12 @@ public class Entity {
     int knockBackCounter = 0;
     public int guardCounter = 0;
     int offBalanceCounter = 0;
+    int attackCounter = 0;
+    public int windupTime = 0;
+    public int strikeTime = 0;
+    public int attackDuration = 0;
+    public int attackAreaActiveDuration = 6;
+    
     
     //CHARACTER ATTRIBUTES
     public String name;
@@ -103,6 +111,25 @@ public class Entity {
     public boolean stackable = false;
     public int amount = 1;
     public int lightRadius;
+    public double spriteRotation = 0;
+    public int weaponOffsetX = 0;
+    public int weaponOffsetY = 0;
+    public int weaponGripX = -1;
+    public int weaponGripY = -1;
+    public int weaponPivotDistance = 0;
+    public int weaponArmLength = 0;
+    public int weaponArcDistance = 0;
+    public int attackAreaOffsetX = 0;
+    public int attackAreaOffsetY = 0;
+    
+    // Held weapon display (idle, non-attacking)
+    public boolean showHeld = false;
+    public int heldOffsetX = 0;
+    public int heldOffsetY = 0;
+    public double heldRotation = 0.0;
+    public boolean heldFlipHorizontal = false;
+    public int heldAnchorX = 0;  // pixels from player center, positive = right
+    public int heldAnchorY = 0;  // pixels from player center, positive = down
     
     //TYPE
     public int type;    //0=player, 1 = npc, 2 = monster
@@ -118,6 +145,13 @@ public class Entity {
     public final int type_light = 9;
     public final int type_pickaxe = 10;
     public final int type_boots = 20;
+    
+    //VFX
+    ArrayList<SlashEffect> slashEffects = new ArrayList<>();
+    public BufferedImage[] slashFrames;
+    public int slashSize = 1;
+    
+    public boolean showAttackArea = false;
     
     public Entity(GamePanel gp){
         this.gp = gp;
@@ -140,7 +174,29 @@ public class Entity {
         return worldY + solidArea.y;
     }
     public int getBottomY(){
-        return worldX + solidArea.y + solidArea.height;
+        return worldY + solidArea.y + solidArea.height;
+    }
+    public Rectangle getAttackAreaBounds(){
+        int solidLeft = worldX + solidArea.x;
+        int solidTop = worldY + solidArea.y;
+        int solidRight = solidLeft + solidArea.width;
+        int solidBottom = solidTop + solidArea.height;
+        int solidCenterX = solidLeft + solidArea.width / 2;
+        int solidCenterY = solidTop + solidArea.height / 2;
+
+        int attackX = solidCenterX - attackArea.width / 2; // Adjust attackAreaOffsetX in the weapon class to nudge left/right.
+        int attackY = solidCenterY - attackArea.height / 2; // Adjust attackAreaOffsetY in the weapon class to nudge up/down.
+
+        switch(direction){
+            case "up":    attackY = solidTop - attackArea.height; break; // Change weapon attackArea.height to resize vertical reach.
+            case "down":  attackY = solidBottom; break;                  // Change attackAreaOffsetY to nudge down attacks up/down.
+            case "left":  attackX = solidLeft - attackArea.width; break; // Change weapon attackArea.width to resize horizontal reach.
+            case "right": attackX = solidRight; break;                   // Change attackAreaOffsetX to nudge side attacks left/right.
+        }
+        return new Rectangle(attackX + attackAreaOffsetX, attackY + attackAreaOffsetY, attackArea.width, attackArea.height);
+    }
+    public Rectangle getSolidAreaBounds(){
+        return new Rectangle(worldX + solidArea.x, worldY + solidArea.y, solidArea.width, solidArea.height);
     }
     public int getCol(){
         return (worldX + solidArea.x)/gp.tileSize;
@@ -481,61 +537,87 @@ public class Entity {
         return oppositeDirection;
     }
     public void attacking(){
-        
         spriteCounter++;
+        showAttackArea = spriteCounter > motion1_duration
+                && spriteCounter <= motion1_duration + attackAreaActiveDuration;
         
         if(spriteCounter <= motion1_duration){
             spriteNum =0;
         }
-        if(spriteCounter > motion1_duration && spriteCounter <= motion2_duration){
+        if(spriteCounter > motion1_duration && spriteCounter <= motion1_duration + motion2_duration){
             spriteNum =1;
-            
+        }
+        if(showAttackArea == true){
+             
             //Save the current worldX, worldY, solidArea
             int currentWorldX = worldX;
             int currentWorldY = worldY;
+            int solidAreaX = solidArea.x;
+            int solidAreaY = solidArea.y;
+            int solidAreaDefaultXTemp = solidAreaDefaultX;
+            int solidAreaDefaultYTemp = solidAreaDefaultY;
             int solidAreaWidth = solidArea.width;
             int solidAreaHeight = solidArea.height;
+            int currentSpeed = speed;
             
-            //Adjust player's worldX/Y for the attackArea
-            switch(direction){
-                case "up": worldY -= attackArea.height; break;
-                case "down": worldY += attackArea.height; break;
-                case "left": worldX -= attackArea.width; break;
-                case "right": worldX += attackArea.width; break;
-            }
+            Rectangle attackBounds = getAttackAreaBounds();
             
             //attackArea becomes solidArea
+            worldX = attackBounds.x;
+            worldY = attackBounds.y;
+            solidArea.x = 0;
+            solidArea.y = 0;
+            solidAreaDefaultX = 0;
+            solidAreaDefaultY = 0;
             solidArea.width = attackArea.width;
             solidArea.height = attackArea.height;
+            speed = 0;
             
             if(type == type_monster){
-                if(gp.cChecker.checkPlayer(this) == true){
+                if(attackBounds.intersects(gp.player.getSolidAreaBounds())){
                     damagePlayer(attack);
                 }
             }
             else{//Player
-                //Check monster collision with the updated worldX, worldY, and solidArea
-                int monsterIndex = gp.cChecker.checkEntity(this, gp.monster);
-                gp.player.damageMonster(monsterIndex, this, attack, currentWeapon.knockBackPower);
+                for(int i = 0; i < gp.monster[gp.currentMap].length; i++){
+                    if(gp.monster[gp.currentMap][i] != null
+                            && attackBounds.intersects(gp.monster[gp.currentMap][i].getSolidAreaBounds())){
+                        gp.player.damageMonster(i, this, attack, currentWeapon.knockBackPower);
+                    }
+                }
 
-                int iTileIndex = gp.cChecker.checkEntity(this, gp.iTile);
-                gp.player.damageInteractiveTile(iTileIndex);
+                for(int i = 0; i < gp.iTile[gp.currentMap].length; i++){
+                    if(gp.iTile[gp.currentMap][i] != null
+                            && attackBounds.intersects(gp.iTile[gp.currentMap][i].getSolidAreaBounds())){
+                        gp.player.damageInteractiveTile(i);
+                    }
+                }
 
-                int projectileIndex = gp.cChecker.checkEntity(this, gp.projectile);
-                gp.player.damageProjectile(projectileIndex);
+                for(int i = 0; i < gp.projectile[gp.currentMap].length; i++){
+                    if(gp.projectile[gp.currentMap][i] != null
+                            && attackBounds.intersects(gp.projectile[gp.currentMap][i].getSolidAreaBounds())){
+                        gp.player.damageProjectile(i);
+                    }
+                }
             }
             
             
             //After checking collision, restore the original data
             worldX = currentWorldX;
             worldY = currentWorldY;
+            solidArea.x = solidAreaX;
+            solidArea.y = solidAreaY;
+            solidAreaDefaultX = solidAreaDefaultXTemp;
+            solidAreaDefaultY = solidAreaDefaultYTemp;
             solidArea.width = solidAreaWidth;
             solidArea.height = solidAreaHeight;
+            speed = currentSpeed;
             
         }
-        if(spriteCounter > motion2_duration){
+        if(spriteCounter > motion1_duration + motion2_duration){
             spriteNum = 1;
             spriteCounter = 0;
+            showAttackArea = false;
             attacking = false;
         }
     }
@@ -602,75 +684,94 @@ public class Entity {
     }
     public void draw(Graphics2D g2){
         
-            BufferedImage image = null;
-            
-            //makes it so that it only prints tiles within the player screen boundary
-            if( inCamera() == true){
-                
-                    int tempScreenX = getScreenX();
-                    int tempScreenY = getScreenY();
+        BufferedImage image = null;
 
-                    switch(direction){
-                        case "up":
-                            if(attacking == false){
-                                if(spriteNum == 0){image = up0;}
-                                if(spriteNum == 1){image = up1;}
-                                if(spriteNum == 2){image = up2;}
-                            }
-                            if(attacking == true){
-                                tempScreenY = getScreenY() - up1.getHeight();
-                                if(spriteNum == 0){image = attackUp0;}
-                                if(spriteNum == 1){image = attackUp1;}
-                            }
-                            break;  
-                        case "down":
-                            if(attacking == false){
-                                if(spriteNum == 0){image = down0;}
-                                if(spriteNum == 1){image = down1;}
-                                if(spriteNum == 2){image = down2;}
-                            }
-                            if(attacking == true){
-                                if(spriteNum == 0){image = attackDown0;}
-                                if(spriteNum == 1){image = attackDown1;}
-                            }
-                            break;
-                        case "left":
-                            if(attacking == false){
-                                if(spriteNum == 0){image = left0;}
-                                if(spriteNum == 1){image = left1;}
-                                if(spriteNum == 2){image = left2;}
-                            }
-                            if(attacking == true){
-                                tempScreenX = getScreenX() - left1.getWidth();
-                                if(spriteNum == 0){image = attackLeft0;}
-                                if(spriteNum == 1){image = attackLeft1;}
-                            }
-                            break;
-                        case"right":
-                            if(attacking == false){
-                                if(spriteNum == 0){image = right0;}
-                                if(spriteNum == 1){image = right1;}
-                                if(spriteNum == 2){image = right2;}
-                            }
-                            if(attacking == true){
-                                if(spriteNum == 0){image = attackRight0;}
-                                if(spriteNum == 1){image = attackRight1;}
-                            }
-                            break; 
+        //makes it so that it only prints tiles within the player screen boundary
+        if( inCamera() == true){
+
+            int tempScreenX = getScreenX();
+            int tempScreenY = getScreenY();
+
+            switch(direction){
+                case "up":
+                    if(attacking == false){
+                        if(spriteNum == 0){image = up0;}
+                        if(spriteNum == 1){image = up1;}
+                        if(spriteNum == 2){image = up2;}
                     }
-            
-            if(invincible == true){
-                hpBarOn = true;
-                hpBarCounter = 0;
-                changeAlpha(g2,0.4f);   //sets visual for invinsible active state
+                    if(attacking == true){
+                        tempScreenY = getScreenY() - up1.getHeight();
+                        if(spriteNum == 0){image = attackUp0;}
+                        if(spriteNum == 1){image = attackUp1;}
+                    }
+                    break;  
+                case "down":
+                    if(attacking == false){
+                        if(spriteNum == 0){image = down0;}
+                        if(spriteNum == 1){image = down1;}
+                        if(spriteNum == 2){image = down2;}
+                    }
+                    if(attacking == true){
+                        if(spriteNum == 0){image = attackDown0;}
+                        if(spriteNum == 1){image = attackDown1;}
+                    }
+                    break;
+                case "left":
+                    if(attacking == false){
+                        if(spriteNum == 0){image = left0;}
+                        if(spriteNum == 1){image = left1;}
+                        if(spriteNum == 2){image = left2;}
+                    }
+                    if(attacking == true){
+                        tempScreenX = getScreenX() - left1.getWidth();
+                        if(spriteNum == 0){image = attackLeft0;}
+                        if(spriteNum == 1){image = attackLeft1;}
+                    }
+                    break;
+                case"right":
+                    if(attacking == false){
+                        if(spriteNum == 0){image = right0;}
+                        if(spriteNum == 1){image = right1;}
+                        if(spriteNum == 2){image = right2;}
+                    }
+                    if(attacking == true){
+                        if(spriteNum == 0){image = attackRight0;}
+                        if(spriteNum == 1){image = attackRight1;}
+                    }
+                    break; 
             }
-            if(dying == true){
-                dyingAnimation(g2);
+
+        if(invincible == true){
+            hpBarOn = true;
+            hpBarCounter = 0;
+            changeAlpha(g2,0.4f);   //sets visual for invinsible active state
+        }
+        if(dying == true){
+            dyingAnimation(g2);
+        }
+
+        g2.drawImage(image, tempScreenX, tempScreenY, null);
+            changeAlpha(g2,1f);
+        }
+        
+        // DEBUG: draw solid and attack areas
+        if(gp.keyH.showDebugHitbox == true){
+            int screenX = getScreenX();
+            int screenY = getScreenY();
+
+            // green solid area - always show
+            g2.setColor(new Color(0, 255, 0, 100));
+            g2.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+
+            // red attack area - only show when attacking
+            if(showAttackArea == true){
+                Rectangle attackBounds = getAttackAreaBounds();
+                int attackScreenX = attackBounds.x - worldX + screenX;
+                int attackScreenY = attackBounds.y - worldY + screenY;
+                g2.setColor(new Color(255, 0, 0, 255));
+                g2.drawRect(attackScreenX, attackScreenY, attackArea.width, attackArea.height);
             }
-                
-            g2.drawImage(image, tempScreenX, tempScreenY, null);
-                changeAlpha(g2,1f);
-            }
+        }
     }
     public void dyingAnimation(Graphics2D g2){
         
@@ -701,6 +802,10 @@ public class Entity {
         BufferedImage image = null;
         
         try{
+            // check if file exists first
+            if(getClass().getResourceAsStream(imagePath + ".png") == null){
+                return null; // file not found, return null safely
+            }
             image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
             image = uTool.scaleImage(image, width, height);
         }
