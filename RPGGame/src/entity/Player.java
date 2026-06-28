@@ -19,6 +19,7 @@ import object.OBJ_Shield_Wood;
 import object.equipments.OBJ_Sword_Normal;
 import object.OBJ_Torch;
 import object.equipments.OBJ_Axe_Divine_Rhitta;
+import object.equipments.OBJ_Stick;
 import object.equipments.OBJ_Sword_Rapier;
 import object.equipments.OBJ_Sword_Scimitar;
 import rpggame.UtilityTool;
@@ -139,6 +140,7 @@ public class Player extends Entity{
         inventory.add(new OBJ_Axe_Divine_Rhitta(gp));
         inventory.add(new OBJ_Sword_Rapier(gp));
         inventory.add(new OBJ_Sword_Scimitar(gp));
+        inventory.add(new OBJ_Stick(gp));
     }
     public int getAttack(){
         attackArea = currentWeapon.attackArea;
